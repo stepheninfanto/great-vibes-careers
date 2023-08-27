@@ -11,9 +11,9 @@ async function getJobsList() {
       industryName: "Technology",
       location: "San Francisco, CA",
       remoteType: "Partial Remote",
-      experience: "3+ years",
-      salary: "$100,000 - $120,000",
-      totalEmployee: "500+",
+      experience: ["3", "5"],
+      salary: ["100,000", "120,000"],
+      totalEmployee: "500",
       applyType: "Quick Application",
     },
     {
@@ -23,9 +23,33 @@ async function getJobsList() {
       industryName: "Marketing",
       location: "New York, NY",
       remoteType: "Fully Remote",
-      experience: "2-4 years",
-      salary: "$70,000 - $90,000",
-      totalEmployee: "200+",
+      experience: ["2", "4"],
+      salary: ["100,000", "120,000"],
+      totalEmployee: "200",
+      applyType: "Quick Application",
+    },
+    {
+      jobId: 3,
+      jobTitle: "Marketing Specialist",
+      companyName: "Global Marketing Group",
+      industryName: "Marketing",
+      location: "New York, NY",
+      remoteType: "Fully Remote",
+      experience: ["2", "4"],
+      salary: ["100,000", "120,000"],
+      totalEmployee: "200",
+      applyType: "Quick Application",
+    },
+    {
+      jobId: 4,
+      jobTitle: "Marketing Specialist",
+      companyName: "Global Marketing Group",
+      industryName: "Marketing",
+      location: "New York, NY",
+      remoteType: "Fully Remote",
+      experience: ["2", "4"],
+      salary: ["100,000", "120,000"],
+      totalEmployee: "200",
       applyType: "Quick Application",
     },
   ];
@@ -40,7 +64,6 @@ export default async function Home() {
       {/* styles as props  */}
       {/* state management for create */}
       {/* add edit and delete functionality  */}
-      {/* add overlay to modal  */}
       {/* success modal  */}
       {/* add validations for mandatory fields  */}
       {/* add error popup */}
