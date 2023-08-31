@@ -1,67 +1,12 @@
 import AppContainer from "./components/AppContainer";
-
-async function getJobsList() {
-  // const res = await fetch(`api/getJobDetails`);
-  // return res.json();
-  return [
-    {
-      jobId: 1,
-      jobTitle: "Software Engineer",
-      companyName: "TechCo Inc.",
-      industryName: "Technology",
-      location: "San Francisco, CA",
-      remoteType: "Partial Remote",
-      experience: ["3", "5"],
-      salary: ["100,000", "120,000"],
-      totalEmployee: "500",
-      applyType: "Quick Application",
-    },
-    {
-      jobId: 2,
-      jobTitle: "Marketing Specialist",
-      companyName: "Global Marketing Group",
-      industryName: "Marketing",
-      location: "New York, NY",
-      remoteType: "Fully Remote",
-      experience: ["2", "4"],
-      salary: ["100,000", "120,000"],
-      totalEmployee: "200",
-      applyType: "Quick Application",
-    },
-    {
-      jobId: 3,
-      jobTitle: "Marketing Specialist",
-      companyName: "Global Marketing Group",
-      industryName: "Marketing",
-      location: "New York, NY",
-      remoteType: "Fully Remote",
-      experience: ["2", "4"],
-      salary: ["100,000", "120,000"],
-      totalEmployee: "200",
-      applyType: "Quick Application",
-    },
-    {
-      jobId: 4,
-      jobTitle: "Marketing Specialist",
-      companyName: "Global Marketing Group",
-      industryName: "Marketing",
-      location: "New York, NY",
-      remoteType: "Fully Remote",
-      experience: ["2", "4"],
-      salary: ["100,000", "120,000"],
-      totalEmployee: "200",
-      applyType: "Quick Application",
-    },
-  ];
-}
+// import { AppProvider } from "./components/AppProvider";
+import { getJobsList } from "./components/utils/fetchApiRSC";
 
 export default async function Home() {
   const jobsList = await getJobsList();
   return (
     <main className="flex min-h-screen flex-col p-5">
       <AppContainer jobsList={jobsList} />
-      {/* exact as figma */}
-      {/* styles as props  */}
       {/* state management for create */}
       {/* add edit and delete functionality  */}
       {/* success modal  */}

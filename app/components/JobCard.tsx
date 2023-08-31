@@ -1,15 +1,24 @@
+"use client";
 import React from "react";
-import { Job } from "./AppContainer";
 import Image from "next/image";
+import {
+  deleteJobDetails,
+  editJobDetails,
+  getJobsList,
+} from "./utils/fetchApiRSC";
+import { Job } from "./utils/types/types";
+import CustomButton, { VariantType } from "./UI/Button";
+import { useRouter } from "next/navigation";
 
 function JobCard({ jobData }: { jobData: Job }) {
   const styles = {
     divWrapper: "flex flex-col items-start gap-2 self-stretch",
     textWrapper: "text-[#212427] text-base not-italic font-normal leading-6",
   };
+  const router = useRouter();
 
   const {
-    jobId,
+    id,
     jobTitle,
     companyName,
     industryName,
@@ -18,18 +27,36 @@ function JobCard({ jobData }: { jobData: Job }) {
     remoteType,
     totalEmployee,
     location,
+    applyType,
   } = jobData;
 
-  const deleteJob = (jobId: Number) => {
-    // delete the job id from the db;
+  const deleteJob = async (id: Number) => {
+    const response = await deleteJobDetails(id);
+    router.refresh();
   };
 
-  const editJob = (jobId: Number) => {
-    // popp up create form
-    // populate data into form
+  const editJob = async (id: Number = 8) => {
+    const data = {
+      jobTitle: "Frontend Developer-8",
+      companyName: "InfantoSys 8",
+      industryName: "Frontend 8",
+      location: "location 8",
+      remoteType: "remoteType 8",
+      experience: [1, 2],
+    };
+    await editJobDetails(id, data);
   };
 
-  const onClickQuickApply = () => {};
+  const onApply = (e: any) => {};
+
+  let btnText = "Apply Now";
+  let variantType: VariantType = VariantType.Primary;
+
+  if (applyType !== "Quick") {
+    btnText = "External Apply";
+    variantType = VariantType.Secondary;
+  }
+
   return (
     <div
       className="flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] 
@@ -78,30 +105,20 @@ function JobCard({ jobData }: { jobData: Job }) {
           </div>
         </div>
         {/* button  group */}
-        <div className="flex flex-row justify-between">
-          <div>
-            <button
-              onClick={onClickQuickApply}
-              className="flex content-center px-4 py-2 bg-primaryColor text-whiteFont shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]
-               rounded-md"
-            >
-              Apply Now
-            </button>
-          </div>
-          <div>
-            <button
-              onClick={onClickQuickApply}
-              className="flex content-center px-4 py-2 border rounded-[5px] border-solid border-[#1597E4]
-                   text-primaryColor shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] "
-            >
-              External Apply
-            </button>
-          </div>
+        <div className="flex flex-row space-x-4">
+          <CustomButton
+            variant={variantType}
+            btnText={btnText}
+            onClick={onApply}
+          />
         </div>
       </div>
       {/* btns for edit and delete */}
       <div className="ml-auto flex space-x-2">
-        <button className="" onClick={() => editJob(jobId)}>
+        <button
+          onClick={() => editJob(id)}
+          className="hover:bg-cardBorder p-1 rounded"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -118,7 +135,10 @@ function JobCard({ jobData }: { jobData: Job }) {
           </svg>
         </button>
 
-        <button className="" onClick={() => deleteJob(jobId)}>
+        <button
+          onClick={() => deleteJob(id)}
+          className="hover:bg-cardBorder p-1 rounded"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

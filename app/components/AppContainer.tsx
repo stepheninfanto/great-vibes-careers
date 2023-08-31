@@ -1,21 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import CreateJobForm from "./CreateJobForm";
+import JobForm from "./JobForm";
 import JobCard from "./JobCard";
-
-export type Job = {
-  jobId: Number;
-  jobTitle: string;
-  companyName: string;
-  industryName: string;
-  location: string;
-  remoteType: string;
-  experience: string;
-  salary: string;
-  totalEmployee: string;
-  applyType: any;
-};
+import { Job } from "./utils/types/types";
 
 function AppContainer({ jobsList }: Job[] | any) {
   // fetch the data from api service
@@ -33,7 +21,7 @@ function AppContainer({ jobsList }: Job[] | any) {
         Create job
       </button>
 
-      {isOpen && <CreateJobForm isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {isOpen && <JobForm isOpen={isOpen} setIsOpen={setIsOpen} />}
 
       {/* canvas */}
       {/* <div className="flex flex-wrap border gap-2 justify-start pl-[85px] pr-[44.882px]  w-screen"> */}
@@ -41,7 +29,7 @@ function AppContainer({ jobsList }: Job[] | any) {
         {/* <div className="flex  flex-wrap border justify-start w-screen pr-[44.882px] pt-[30px] pb-[49px]"> */}
         {/* <div className="flex justify-end items-start gap-[83.118px] pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] w-screen "> */}
         {jobsList.map((item: any) => (
-          <div key={item.jobId} className="flex">
+          <div key={item.id} className="flex">
             <JobCard jobData={item} />
           </div>
         ))}
