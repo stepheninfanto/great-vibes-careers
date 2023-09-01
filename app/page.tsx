@@ -7,8 +7,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col p-5">
       <AppContainer jobsList={jobsList} />
-      {/* state management for create */}
-      {/* add edit and delete functionality  */}
+      {/* state management for create, edit  */}
       {/* success modal  */}
       {/* add validations for mandatory fields  */}
       {/* add error popup */}

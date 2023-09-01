@@ -4,33 +4,64 @@ import React, { useState } from "react";
 import JobForm from "./JobForm";
 import JobCard from "./JobCard";
 import { Job } from "./utils/types/types";
+import { CardButton } from "./UI/Button";
 
 function AppContainer({ jobsList }: Job[] | any) {
-  // fetch the data from api service
   const [isOpen, setIsOpen] = useState(false);
+  const initalState = {
+    id: 0,
+    jobTitle: "",
+    companyName: "",
+    industryName: "",
+    location: "",
+    remoteType: "",
+    experience: [0, 1],
+    salary: [0, 1],
+    totalEmployee: "",
+    applyType: "",
+  };
+  const [details, setDetails] = useState<Job>({
+    id: 0,
+    jobTitle: "",
+    companyName: "",
+    industryName: "",
+    location: "",
+    remoteType: "",
+    experience: [0, 1],
+    salary: [0, 1],
+    totalEmployee: "",
+    applyType: "",
+  });
 
   const handleClick = () => {
     setIsOpen(!isOpen);
+    setDetails(initalState);
   };
   return (
     <div className="relative min-h-screen">
-      <button
-        onClick={handleClick}
-        className="px-2 py-4 bg-[#1597E4] text-white content-center items-center rounded"
-      >
-        Create job
-      </button>
+      <CardButton onClick={handleClick} btnText="Create Job" />
 
-      {isOpen && <JobForm isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {isOpen && (
+        <JobForm
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          details={details}
+          setDetails={setDetails}
+        />
+      )}
 
       {/* canvas */}
       {/* <div className="flex flex-wrap border gap-2 justify-start pl-[85px] pr-[44.882px]  w-screen"> */}
+      {/* <div className="flex  flex-wrap border justify-start w-screen pr-[44.882px] pt-[30px] pb-[49px]"> */}
+      {/* <div className="flex justify-end items-start gap-[83.118px] pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] w-screen "> */}
       <div className="grid grid-cols-2 pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] gap-7 ">
-        {/* <div className="flex  flex-wrap border justify-start w-screen pr-[44.882px] pt-[30px] pb-[49px]"> */}
-        {/* <div className="flex justify-end items-start gap-[83.118px] pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] w-screen "> */}
         {jobsList.map((item: any) => (
           <div key={item.id} className="flex">
-            <JobCard jobData={item} />
+            <JobCard
+              jobData={item}
+              setIsOpen={setIsOpen}
+              setDetails={setDetails}
+            />
           </div>
         ))}
       </div>

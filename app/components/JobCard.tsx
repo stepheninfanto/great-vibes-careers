@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Dispatch } from "react";
 import Image from "next/image";
 import {
   deleteJobDetails,
@@ -7,14 +7,24 @@ import {
   getJobsList,
 } from "./utils/fetchApiRSC";
 import { Job } from "./utils/types/types";
-import CustomButton, { VariantType } from "./UI/Button";
+import { CardButton, VariantType } from "./UI/Button";
 import { useRouter } from "next/navigation";
 
-function JobCard({ jobData }: { jobData: Job }) {
-  const styles = {
+function JobCard({
+  jobData,
+  setIsOpen,
+  setDetails,
+}: {
+  jobData: Job;
+  setIsOpen: Dispatch<boolean>;
+  setDetails: Dispatch<Job>;
+}) {
+  const CardStyles = {
     divWrapper: "flex flex-col items-start gap-2 self-stretch",
     textWrapper: "text-[#212427] text-base not-italic font-normal leading-6",
   };
+
+  const { divWrapper, textWrapper } = CardStyles;
   const router = useRouter();
 
   const {
@@ -35,16 +45,9 @@ function JobCard({ jobData }: { jobData: Job }) {
     router.refresh();
   };
 
-  const editJob = async (id: Number = 8) => {
-    const data = {
-      jobTitle: "Frontend Developer-8",
-      companyName: "InfantoSys 8",
-      industryName: "Frontend 8",
-      location: "location 8",
-      remoteType: "remoteType 8",
-      experience: [1, 2],
-    };
-    await editJobDetails(id, data);
+  const editJob = async (id: any) => {
+    setIsOpen(true);
+    setDetails(jobData);
   };
 
   const onApply = (e: any) => {};
@@ -60,7 +63,7 @@ function JobCard({ jobData }: { jobData: Job }) {
   return (
     <div
       className="flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] 
-        border rounded-[10px] border-solid  border-cardBorder "
+        border rounded-[10px] border-solid  border-cardBorder"
     >
       {/* logo section  */}
       <section className="h-12 w-12 flex flex-col">
@@ -88,32 +91,37 @@ function JobCard({ jobData }: { jobData: Job }) {
         </div>
         {/* details group */}
         <div className="items-start flex flex-col gap-2 relative">
-          {/* FIELD IS NOT IN FORM DESIGN */}
-          {/* <div className={`${styles.divWrapper} flex-col`}>
-            <p className="textWrapper">Part-Time (9.00 am - 5.00 pm IST)</p>
-          </div> */}
-          <div className={`${styles.divWrapper}`}>
-            <p className="textWrapper">{`Experience (${experience[0]} - ${experience[1]} years)`}</p>
-          </div>
-          <div className={`${styles.divWrapper}`}>
-            <p className="textWrapper">
-              {`INR (₹) (${salary[0]} - ${salary[1]}/ Month)`}
-            </p>
-          </div>
-          <div className={`${styles.divWrapper}`}>
-            <div className="textWrapper">{totalEmployee} employees</div>
-          </div>
+          {[
+            {
+              textContent: "Part-Time (9.00 am - 5.00 pm IST)",
+            },
+            {
+              textContent:
+                "Experience (" +
+                `${experience[0]} - ${experience[1]}` +
+                ") years",
+            },
+            {
+              textContent:
+                "INR (₹) (" + `${salary[0]} - ${salary[1]}` + ")/ Month",
+            },
+            {
+              textContent: `${totalEmployee}` + "employees",
+            },
+          ].map(({ textContent }) => (
+            <div className={divWrapper}>
+              <p className={textWrapper}>{textContent}</p>
+            </div>
+          ))}
         </div>
-        {/* button  group */}
         <div className="flex flex-row space-x-4">
-          <CustomButton
+          <CardButton
             variant={variantType}
             btnText={btnText}
             onClick={onApply}
           />
         </div>
       </div>
-      {/* btns for edit and delete */}
       <div className="ml-auto flex space-x-2">
         <button
           onClick={() => editJob(id)}

@@ -5,8 +5,8 @@ export type Job = {
   industryName: string;
   location: string;
   remoteType: string;
-  experience: Array<string>;
-  salary: Array<string>;
+  experience: Array<Number>;
+  salary: Array<Number>;
   totalEmployee: string;
   applyType: any;
 };

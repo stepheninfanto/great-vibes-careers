@@ -16,11 +16,12 @@ type Styles = {
 };
 
 const styles: Styles = {
-  primary: "bg-primaryColor text-whiteFont",
-  secondary: "border border-solid border-primaryColor text-primaryColor",
+  primary: "bg-primaryColor text-whiteFont rounded-md px-4 py-2",
+  secondary:
+    "border border-solid border-primaryColor text-primaryColor rounded-md px-4 py-2",
 };
 
-function CustomButton({
+export function CardButton({
   onClick,
   variant = VariantType.Primary,
   btnText,
@@ -29,13 +30,11 @@ function CustomButton({
     <div>
       <button
         onClick={onClick}
-        className={`flex content-center px-4 py-2 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]
-      rounded-md ${styles[variant]}`}
+        className={`flex content-center shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]
+       ${styles[variant]}`}
       >
         {btnText}
       </button>
     </div>
   );
 }
-
-export default CustomButton;

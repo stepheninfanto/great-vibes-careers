@@ -1,7 +1,6 @@
 //get
 export const getJobsList = async () => {
   const response = await fetch(process.env.URL + "/api/jobDetails", {
-    cache: "no-store",
     next: { tags: ["jobCollection"], revalidate: 0 },
   });
   const { data } = await response.json();

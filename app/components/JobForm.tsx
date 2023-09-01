@@ -1,31 +1,26 @@
 "use client";
 
-import React, { Dispatch, useMemo, useState } from "react";
-import { saveJobDetails } from "./utils/fetchApiRSC";
+import React, { Dispatch, useEffect, useState } from "react";
+import { editJobDetails, saveJobDetails } from "./utils/fetchApiRSC";
 import { Job } from "./utils/types/types";
 import { useRouter } from "next/navigation";
-import { LabeledInput, RangeInputs } from "./UI/LabeledInput";
+import LabeledInput from "./UI/LabeledInputs";
+import { CardButton } from "./UI/Button";
 
 function JobForm({
   isOpen,
   setIsOpen,
+  details,
+  setDetails,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<boolean>;
+  details: Job;
+  setDetails: Dispatch<any>;
 }) {
   const [step, setStep] = useState("1");
-  const [details, setDetails] = useState<Job>({
-    id: 0,
-    jobTitle: "",
-    companyName: "",
-    industryName: "",
-    location: "",
-    remoteType: "",
-    experience: [],
-    salary: [],
-    totalEmployee: "",
-    applyType: "",
-  });
+  const [mode, setMode] = useState("Edit");
+
   const router = useRouter();
 
   const {
@@ -41,15 +36,36 @@ function JobForm({
     applyType,
   } = details;
 
-  const handleChange = (e: React.SyntheticEvent<EventTarget>) => {
-    e.preventDefault();
-    let { name, value } = e.target as HTMLInputElement;
+  useEffect(() => {
+    setMode(id === 0 ? "Create" : "Edit");
+  }, []);
+
+  const handleChange = ({ name, value }: any) => {
+    // Uncomment this line if you want to prevent the default behavior
+    // e.preventDefault();
+
+    // let { name, value } = e.target as HTMLInputElement;
+
     console.log(name, value);
-    name == "Quick" ? (value = "Quick") : (value = "External");
-    setDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+
+    switch (name) {
+      case "Quick":
+        value = "Quick";
+        break;
+      case "External":
+        value = "External";
+        break;
+      default:
+        // Handle other cases if needed
+        break;
+    }
+
+    // setDetails((prevDetails: any) => {
+    //   return {
+    //     ...prevDetails,
+    //     [name]: value,
+    //   };
+    // });
   };
 
   const handleStepChange = async () => {
@@ -57,43 +73,38 @@ function JobForm({
       setStep("2");
     } else {
       setIsOpen(false);
-
-      const jobData = {
-        jobTitle: "",
-        companyName: "",
-        industryName: "",
-        location: "",
-        remoteType: "Full Remote",
-        experience: "3 years",
-        salary: "100,000 - 120,000",
-        totalEmployee: "500",
-        applyType: "quick",
-      };
-      const res = await saveJobDetails(jobData);
+      id === 0
+        ? await saveJobDetails(details)
+        : await editJobDetails(id, details);
       router.refresh();
     }
   };
 
+  const FormStyles = {
+    input:
+      "flex w-full items-start gap-2.5 self-stretch border border-cardBorder px-3 py-2 rounded-[5px] border-solid bg-cardColor",
+    label: "text-darkFont text-sm font-semibold leading-5 gap-2",
+    titleText: "text-xl not-italic font-medium leading-7 text-darkFont",
+    stepText:
+      "text-darkFont text-right text-base not-italic font-medium leading-6",
+    dualDiv: "flex flex-row gap-6",
+    radio: "w-5 h-5",
+    divBtn: "flex flex-row-reverse",
+  };
+
+  const { input, label, stepText, titleText, dualDiv, radio, divBtn } =
+    FormStyles;
+
   function Step1() {
-    const styles = {
-      input:
-        "flex w-full items-start gap-2.5 self-stretch border border-cardBorder px-3 py-2 rounded-[5px] border-solid bg-cardColor",
-      label: "text-darkFont text-sm font-semibold leading-5 gap-2",
-      titleText: "text-xl not-italic font-medium leading-7 text-darkFont",
-      stepText:
-        "text-darkFont text-right text-base not-italic font-medium leading-6",
-    };
-
-    const { input, label, stepText, titleText } = styles;
-
     const formFields = [
       {
-        htmlFor: "job-title",
+        htmlFor: "jobtitle",
         label: "Job title",
         placeholder: "ex. UX UI Designer",
         name: "jobTitle",
         value: jobTitle,
         mandatory: true,
+        inputType: "text",
       },
       {
         htmlFor: "companyName",
@@ -102,6 +113,7 @@ function JobForm({
         name: "companyName",
         value: companyName,
         mandatory: true,
+        inputType: "text",
       },
       {
         htmlFor: "Industry",
@@ -110,6 +122,7 @@ function JobForm({
         name: "industry",
         value: industryName,
         mandatory: true,
+        inputType: "text",
       },
     ];
 
@@ -120,6 +133,8 @@ function JobForm({
         placeholder: "ex. Chennai",
         name: "location",
         value: location,
+        labelInvisible: false,
+        inputType: "text",
       },
       {
         htmlFor: "remoteType",
@@ -127,128 +142,177 @@ function JobForm({
         placeholder: "ex. In Office",
         name: "remoteType",
         value: remoteType,
+        labelInvisible: false,
+        inputType: "text",
       },
     ];
 
     return (
-      <form className="space-y-6">
-        <div className="flex justify-between text-darkFont">
-          <p className={`${titleText}`}>Create a job</p>
-          <p className={`${stepText}`}>Step 1</p>
-        </div>
+      <>
+        <div className="space-y-6">
+          <div className="flex justify-between text-darkFont">
+            <p className={`${titleText}`}>{mode} a job</p>
+            <p className={`${stepText}`}>Step 1</p>
+          </div>
 
-        {formFields.map((field) => (
-          <LabeledInput
-            labelStyle={label}
-            inputStyle={input}
-            field={field}
-            onChange={handleChange}
-          />
-        ))}
-
-        <div className="flex flex-row gap-6">
-          {additonalFormFields.map((field) => (
-            <div>
-              <label htmlFor="location" className={`${label}`}>
-                {field.label}
-              </label>
-              <input
-                type="text"
-                className={`${input}`}
-                placeholder={field.placeholder}
-                name={field.name}
-                onChange={() => handleChange}
-              />
-            </div>
+          {formFields.map((field) => (
+            <LabeledInput
+              labelStyle={label}
+              inputStyle={input}
+              field={field}
+              onChange={handleChange}
+            />
           ))}
+
+          <div className={dualDiv}>
+            {additonalFormFields
+              .reduce((pairs: any, field, index, array) => {
+                if (index % 2 === 0) {
+                  pairs.push([field, array[index + 1]]);
+                }
+                return pairs;
+              }, [])
+              .map(([field1, field2]: any) => (
+                <div className={dualDiv} key={field1.name + field2.name}>
+                  <LabeledInput
+                    field={field1}
+                    labelStyle={label}
+                    inputStyle={input}
+                    onChange={handleChange}
+                  />
+                  <LabeledInput
+                    field={field2}
+                    labelStyle={label}
+                    inputStyle={input}
+                    onChange={handleChange}
+                  />
+                </div>
+              ))}
+          </div>
         </div>
-      </form>
+        <div className={divBtn}>
+          <CardButton onClick={handleStepChange} btnText="Next" />
+        </div>
+      </>
     );
   }
 
   function Step2() {
-    const styles = {
-      input:
-        "flex w-full items-start gap-2.5 self-stretch border border-cardBorder px-3 py-2 rounded-[5px] border-solid bg-cardColor",
-      label: "text-darkFont text-sm  font-semibold leading-5 gap-2",
-      radio: "w-5 h-5",
-    };
-
     const applyTypes = [
       { label: "Quick Apply", name: "Quick" },
       { label: "External Apply", name: "External" },
     ];
 
+    const FormFields = [
+      {
+        label: "Experience",
+        name: "experience-min",
+        htmlFor: "experience",
+        labelInVisible: false,
+        inputType: "number",
+        placeholder: "0",
+      },
+      {
+        label: "Experience",
+        name: "experience-max",
+        htmlFor: "experience",
+        labelInVisible: true,
+        inputType: "number",
+        placeholder: "1",
+      },
+      {
+        label: "Salary",
+        name: "salary-min",
+        htmlFor: "salary",
+        labelInVisible: false,
+        inputType: "number",
+        placeholder: "0",
+      },
+      {
+        label: "Salary",
+        name: "salary-max",
+        htmlFor: "salary",
+        labelInVisible: true,
+        inputType: "number",
+        placeholder: "100000",
+      },
+    ];
+
     return (
-      <form className="space-y-6">
-        <div className="flex flex-row space-x-2 ">
-          <div className="w-1/2 text-xl font-normal leading-7 text-darkFont">
-            Create a job
+      <>
+        <div className="space-y-6">
+          <div className="flex flex-row space-x-2 ">
+            <div className="w-1/2 text-xl font-normal leading-7 text-darkFont">
+              {mode} a job
+            </div>
+            <div className="w-1/2 flex flex-row-reverse">Step 2</div>
           </div>
-          <div className="w-1/2 flex flex-row-reverse">Step 2</div>
-        </div>
-        {[
-          {
-            label: "Experience",
-            placeholders: [
-              { Minimum: experience[0] },
-              { Maximum: experience[1] },
-            ],
-            name: "experience",
-            htmlFor: "experience",
-          },
-          {
-            label: "Salary",
-            placeholders: [{ Minimum: salary[0] }, { Maximum: salary[1] }],
-            name: "salary",
-            htmlFor: "salary",
-          },
-        ].map((field) => (
-          <RangeInputs
-            field={field}
-            labelStyle={styles.label}
-            inputStyle={styles.input}
+          {FormFields.reduce((pairs: any, field, index, array) => {
+            if (index % 2 === 0) {
+              pairs.push([field, array[index + 1]]);
+            }
+            return pairs;
+          }, []).map(([field1, field2]: any) => (
+            <div
+              className="flex flex-row gap-6"
+              key={field1.name + field2.name}
+            >
+              <LabeledInput
+                field={field1}
+                labelStyle={label}
+                inputStyle={input}
+                onChange={handleChange}
+              />
+              <LabeledInput
+                field={field2}
+                labelStyle={label}
+                inputStyle={input}
+                onChange={handleChange}
+              />
+            </div>
+          ))}
+
+          <LabeledInput
+            field={{
+              htmlFor: "totalEmployee",
+              placeholder: "ex: 100",
+              name: "totalEmployee",
+              label: "Total Employee",
+              mandatory: false,
+              value: totalEmployee,
+            }}
+            inputStyle={input}
+            labelStyle={label}
             onChange={handleChange}
           />
-        ))}
 
-        <LabeledInput
-          field={{
-            htmlFor: "totalEmployee",
-            placeholder: "ex: 100",
-            name: "totalEmployee",
-            label: "Total Employee",
-            mandatory: false,
-            value: totalEmployee,
-          }}
-          inputStyle={styles.input}
-          labelStyle={styles.label}
-          onChange={handleChange}
-        />
-
-        <div>
-          <label htmlFor="" className={`${styles.label}`}>
-            Apply Type
-          </label>
-          <div className="flex flex-row text-sm not-italic font-normal leading-5 space-x-2 py-2">
-            {applyTypes.map((applyTypeEle, index) => (
-              <div className="flex items-center" key={index}>
-                <input
-                  type="radio"
-                  className={`${styles.radio}`}
-                  placeholder={applyType.label}
-                  name="applyType"
-                  checked={applyType == "Quick"}
-                  onChange={() => handleChange}
-                />
-                <p className="p-1 flex justify-center text-placeholderFont">
-                  {applyTypeEle.label}
-                </p>
-              </div>
-            ))}
+          <div>
+            <label htmlFor="" className={`${label}`}>
+              Apply Type
+            </label>
+            <div className="flex flex-row text-sm not-italic font-normal leading-5 space-x-2 py-2">
+              {applyTypes.map((applyTypeEle, index) => (
+                <div className="flex items-center" key={index}>
+                  <input
+                    type="radio"
+                    className={`${radio}`}
+                    placeholder={applyType.label}
+                    name="applyType"
+                    checked={applyType == "Quick"}
+                    onChange={handleChange}
+                  />
+                  <p className="p-1 flex justify-center text-placeholderFont">
+                    {applyTypeEle.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </form>
+        <div className={divBtn}>
+          <CardButton onClick={handleStepChange} btnText="Save" />
+        </div>
+      </>
     );
   }
 
@@ -264,7 +328,7 @@ function JobForm({
   };
 
   return (
-    <div
+    <form
       className={`fixed inset-0 flex items-center justify-center z-50 
              bg-white rounded-md p-8  drop-shadow-lg ${
                isOpen ? "visible" : "hidden"
@@ -281,17 +345,8 @@ function JobForm({
       lg:min-w-[513px]  relative z-10  h-[584px] flex flex-col space-y-24"
       >
         {selectStep(step)}
-
-        <div className="flex flex-row-reverse">
-          <button
-            onClick={handleStepChange}
-            className="bg-primaryColor px-4 py-2 text-whiteFont rounded-md"
-          >
-            {step === "1" ? "Next" : "Save"}
-          </button>
-        </div>
       </div>
-    </div>
+    </form>
   );
 }
 
