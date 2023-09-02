@@ -1,3 +1,5 @@
+import { Job } from "./types/FormTypes";
+
 //get
 export const getJobsList = async () => {
   const response = await fetch(process.env.URL + "/api/jobDetails", {
@@ -7,13 +9,14 @@ export const getJobsList = async () => {
   return data;
 };
 // add
-export async function saveJobDetails(data: any) {
+export async function saveJobDetails(data: Job) {
+  const { id, ...rest } = data;
   let options = {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify(rest),
   };
   const response = await fetch("/api/jobDetails", options);
-  const customer = await response.json();
+  await response.json();
   return response;
 }
 // edit

@@ -7,12 +7,12 @@ export enum VariantType {
 
 type BtnInput = {
   onClick: any;
-  variant?: VariantType; // Use the enum type here
+  variant?: VariantType;
   btnText: string;
 };
 
 type Styles = {
-  [key in VariantType]: string; // Define a type for the styles object
+  [key in VariantType]: string;
 };
 
 const styles: Styles = {

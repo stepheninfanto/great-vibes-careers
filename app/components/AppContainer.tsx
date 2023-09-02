@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import JobForm from "./JobForm";
 import JobCard from "./JobCard";
-import { Job } from "./utils/types/types";
+import { Job } from "./utils/types/FormTypes";
 import { CardButton } from "./UI/Button";
 
 function AppContainer({ jobsList }: Job[] | any) {

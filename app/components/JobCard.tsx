@@ -6,7 +6,7 @@ import {
   editJobDetails,
   getJobsList,
 } from "./utils/fetchApiRSC";
-import { Job } from "./utils/types/types";
+import { Job } from "./utils/types/FormTypes";
 import { CardButton, VariantType } from "./UI/Button";
 import { useRouter } from "next/navigation";
 
