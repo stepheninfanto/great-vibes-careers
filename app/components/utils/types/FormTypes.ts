@@ -8,5 +8,6 @@ export type Job = {
   experience: Array<Number>;
   salary: Array<Number>;
   totalEmployee: string;
-  applyType: any;
+  applyType: string;
+  [key: string]: string | Number | Array<Number>;
 };

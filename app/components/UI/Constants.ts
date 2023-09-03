@@ -6,6 +6,7 @@ export const formFieldsStep1 = [
     name: "jobTitle",
     mandatory: true,
     inputType: "text",
+    errorMessage: "Please enter your job title",
   },
   {
     htmlFor: "companyName",
@@ -14,6 +15,7 @@ export const formFieldsStep1 = [
     name: "companyName",
     mandatory: true,
     inputType: "text",
+    errorMessage: "please enter your company name",
   },
   {
     htmlFor: "Industry",
@@ -22,6 +24,7 @@ export const formFieldsStep1 = [
     name: "industryName",
     mandatory: true,
     inputType: "text",
+    errorMessage: "please enter your industry name",
   },
 ];
 
@@ -39,7 +42,6 @@ export const additonalFormFieldsStep1 = [
     label: "Remote Type",
     placeholder: "ex. In Office",
     name: "remoteType",
-
     labelInvisible: false,
     inputType: "text",
   },
@@ -76,7 +78,7 @@ export const formFieldsStep2 = [
     htmlFor: "salary",
     labelInVisible: true,
     inputType: "number",
-    placeholder: "100000",
+    placeholder: "100,000",
   },
 ];
 
@@ -84,3 +86,16 @@ export const additonalFormFieldsStep2 = [
   { label: "Quick Apply", name: "Quick" },
   { label: "External Apply", name: "External" },
 ];
+
+export const initalState = {
+  id: 0,
+  jobTitle: "",
+  companyName: "",
+  industryName: "",
+  location: "",
+  remoteType: "",
+  experience: [1, 2],
+  salary: [0, 1],
+  totalEmployee: "",
+  applyType: "",
+};

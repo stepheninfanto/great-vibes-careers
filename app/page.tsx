@@ -5,12 +5,8 @@ import { getJobsList } from "./components/utils/fetchApiRSC";
 export default async function Home() {
   const jobsList = await getJobsList();
   return (
-    <main className="flex min-h-screen flex-col p-5">
+    <main className="flex h-full w-full flex-col p-5 bg-cardBorder">
       <AppContainer jobsList={jobsList} />
-      {/* state management for create, edit  */}
-      {/* success modal  */}
-      {/* add validations for mandatory fields  */}
-      {/* add error popup */}
     </main>
   );
 }

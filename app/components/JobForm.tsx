@@ -28,16 +28,31 @@ export const FormStyles = {
   divBtn: "flex flex-row-reverse",
 };
 
+type FormFieldProps = {
+  htmlFor: string;
+  label: string;
+  placeholder: string;
+  name: keyof Job;
+  mandatory: boolean;
+  inputType: string;
+  [key: string]: string | Number | Array<Number> | boolean;
+};
+
 interface StepProps {
   mode: string;
   formFields: Array<any>;
   additonalFormFields: Array<any>;
   handleChange: ChangeEventHandler<HTMLInputElement>;
   handleStepChange: ChangeEventHandler<HTMLInputElement>;
+  details: Job;
+}
+
+interface Step1Props extends StepProps {
+  errors: any;
 }
 
 interface Step2Props extends StepProps {
-  totalEmployee: string;
+  applyType: string;
 }
 
 function Step1({
@@ -46,7 +61,9 @@ function Step1({
   additonalFormFields,
   handleChange,
   handleStepChange,
-}: StepProps) {
+  details,
+  errors,
+}: Step1Props) {
   return (
     <>
       <div className="space-y-6">
@@ -55,11 +72,12 @@ function Step1({
           <p className={`${FormStyles.stepText}`}>Step 1</p>
         </div>
 
-        {formFields.map((field) => (
+        {formFields.map((field: FormFieldProps) => (
           <FormInput
             key={field.htmlFor}
             field={field}
-            value={field.value}
+            inputValue={details[field.name]}
+            invalidInput={errors[field.name]}
             onChange={handleChange}
           />
         ))}
@@ -72,22 +90,21 @@ function Step1({
               }
               return pairs;
             }, [])
-            .map(([field1, field2]: any) => (
-              <div
-                className={FormStyles.dualDiv}
-                key={field1.name + field2.name}
-              >
+            .map(([field1, field2]: [FormFieldProps, FormFieldProps]) => (
+              <div className={FormStyles.dualDiv} key={field1.name}>
                 <FormInput
                   field={field1}
                   labelStyle={FormStyles.label}
                   inputStyle={FormStyles.input}
                   onChange={handleChange}
+                  inputValue={details[field1.name]}
                 />
                 <FormInput
                   field={field2}
                   labelStyle={FormStyles.label}
                   inputStyle={FormStyles.input}
                   onChange={handleChange}
+                  inputValue={details[field2.name]}
                 />
               </div>
             ))}
@@ -106,7 +123,8 @@ function Step2({
   additonalFormFields,
   handleChange,
   handleStepChange,
-  totalEmployee,
+  applyType,
+  details,
 }: Step2Props) {
   return (
     <>
@@ -124,22 +142,21 @@ function Step2({
             }
             return pairs;
           }, [])
-          .map(([field1, field2]: any) => (
-            <div
-              className="flex flex-row gap-6"
-              key={field1.name + field2.name}
-            >
+          .map(([field1, field2]: [FormFieldProps, FormFieldProps]) => (
+            <div className="flex flex-row gap-6" key={field1.name}>
               <FormInput
                 field={field1}
                 labelStyle={FormStyles.label}
                 inputStyle={FormStyles.input}
                 onChange={handleChange}
+                inputValue={details[field1.name]}
               />
               <FormInput
                 field={field2}
                 labelStyle={FormStyles.label}
                 inputStyle={FormStyles.input}
                 onChange={handleChange}
+                inputValue={details[field2.name]}
               />
             </div>
           ))}
@@ -151,11 +168,11 @@ function Step2({
             name: "totalEmployee",
             label: "Total Employee",
             mandatory: false,
-            value: totalEmployee,
           }}
           inputStyle={FormStyles.input}
           labelStyle={FormStyles.label}
           onChange={handleChange}
+          inputValue={details["totalEmployee"]}
         />
 
         <div>
@@ -163,18 +180,19 @@ function Step2({
             Apply Type
           </label>
           <div className="flex flex-row text-sm not-italic font-normal leading-5 space-x-2 py-2">
-            {additonalFormFields.map((applyTypeEle, index) => (
+            {additonalFormFields.map((applyEle, index) => (
               <div className="flex items-center" key={index}>
                 <input
                   type="radio"
                   className={`${FormStyles.radio}`}
-                  //   placeholder={applyType.label}
+                  placeholder={applyEle.label}
                   name="applyType"
-                  //   checked={applyType == applyTypeEle.name}
+                  value={applyEle.label} // Set the value to the label
+                  checked={applyType === applyEle.label} // Check based on the selectedApplyType
                   onChange={handleChange}
                 />
                 <p className="p-1 flex justify-center text-placeholderFont">
-                  {applyTypeEle.label}
+                  {applyEle.label}
                 </p>
               </div>
             ))}
@@ -201,6 +219,11 @@ function JobForm({
 }) {
   const [step, setStep] = useState("1");
   const [mode, setMode] = useState("Edit");
+  const [errors, setErrors] = useState({
+    jobTitle: false,
+    companyName: false,
+    industryName: false,
+  });
 
   const router = useRouter();
 
@@ -210,24 +233,64 @@ function JobForm({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setDetails({ ...details, [name]: value });
-    console.log(details);
+
+    const updatedDetails: Job = { ...details };
+
+    let rangeIndex = name.includes("max") ? 1 : name.includes("min") ? 0 : 2;
+
+    if (rangeIndex !== 2) {
+      const propertyName = name.split("-")[0];
+      const rangeList = updatedDetails[propertyName] as Array<number>;
+      rangeList[rangeIndex] = Number(value);
+      updatedDetails[propertyName] = rangeList;
+    } else {
+      updatedDetails[name] = value;
+    }
+    console.log(updatedDetails);
+
+    setDetails(updatedDetails);
+  };
+
+  const validateFields = () => {
+    console.log("first");
+    const pattern = /[a-zA-Z]/;
+    const mandatoryFields: string[] = [
+      "jobTitle",
+      "companyName",
+      "industryName",
+    ];
+
+    for (let i = 0; i < mandatoryFields.length; i++) {
+      console.log("second");
+      let field = mandatoryFields[i];
+      let newErrors: any = { ...errors };
+      if (!pattern.test(details[field] as any)) {
+        newErrors[mandatoryFields[i]] = true;
+        setErrors(newErrors);
+        return false;
+      } else {
+        newErrors[mandatoryFields[i]] = false;
+      }
+      console.log(newErrors);
+    }
+
+    return true; // Return true if all fields are valid
   };
 
   const handleStepChange = async () => {
-    if (step === "1") {
-      setStep("2");
-    } else {
+    if (step === "2") {
       setIsOpen(false);
       const { id } = details;
       id === 0
         ? await saveJobDetails(details)
         : await editJobDetails(id, details);
       router.refresh();
+      return;
+    }
+    if (validateFields()) {
+      setStep(String(Number(step) + 1));
     }
   };
-
-  const { input, label, titleText, radio, divBtn } = FormStyles;
 
   const totalEmployee = details.totalEmployee;
   const applyType = details.applyType;
@@ -242,6 +305,8 @@ function JobForm({
             additonalFormFields={additonalFormFieldsStep1}
             handleChange={handleChange}
             handleStepChange={handleStepChange}
+            details={details}
+            errors={errors}
           />
         );
       case "2":
@@ -252,7 +317,8 @@ function JobForm({
             additonalFormFields={additonalFormFieldsStep2}
             handleChange={handleChange}
             handleStepChange={handleStepChange}
-            totalEmployee={totalEmployee}
+            details={details}
+            applyType={applyType}
           />
         );
       default:
@@ -266,7 +332,7 @@ function JobForm({
       bg-white rounded-md p-8  drop-shadow-lg ${
         isOpen ? "visible" : "hidden"
       } `}
-      onSubmit={(e) => e.preventDefault()}
+      // onSubmit={(e) => e.preventDefault()}
     >
       {/* overlay */}
       <div

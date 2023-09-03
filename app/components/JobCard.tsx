@@ -22,9 +22,12 @@ function JobCard({
   const CardStyles = {
     divWrapper: "flex flex-col items-start gap-2 self-stretch",
     textWrapper: "text-[#212427] text-base not-italic font-normal leading-6",
+    cardContainer:
+      "flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] border rounded-[10px] border-solid  border-cardBorder",
+    cardLogo: "h-12 w-12 flex flex-col",
   };
 
-  const { divWrapper, textWrapper } = CardStyles;
+  const { divWrapper, textWrapper, cardContainer, cardLogo } = CardStyles;
   const router = useRouter();
 
   const {
@@ -45,7 +48,7 @@ function JobCard({
     router.refresh();
   };
 
-  const editJob = async (id: any) => {
+  const editJob = async (id: Number) => {
     setIsOpen(true);
     setDetails(jobData);
   };
@@ -55,18 +58,15 @@ function JobCard({
   let btnText = "Apply Now";
   let variantType: VariantType = VariantType.Primary;
 
-  if (applyType !== "Quick") {
+  if (applyType !== "Quick Apply") {
     btnText = "External Apply";
     variantType = VariantType.Secondary;
   }
 
   return (
-    <div
-      className="flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] 
-        border rounded-[10px] border-solid  border-cardBorder"
-    >
+    <div className={cardContainer} key={Math.random()}>
       {/* logo section  */}
-      <section className="h-12 w-12 flex flex-col">
+      <section className={cardLogo}>
         <Image
           src="/netflix.svg"
           width={500}
@@ -78,15 +78,14 @@ function JobCard({
         {/* about group */}
         <div className="items-start inline-flex flex-col relative">
           <div className="text-black text-2xl not-italic font-normal leading-8">
-            {jobTitle || "UX UI Designer"}
+            {jobTitle}
           </div>
           <p className="text-black text-base not-italic font-normal leading-6">
-            {`${companyName} - ${industryName}` ||
-              "Great Vibes - Information Technology"}
+            {`${companyName} - ${industryName}`}
           </p>
-          <div className=" text-[#646464] text-base not-italic font-normal leading-6">
-            {location || "Chennai, Tamilnadu, India"}
-            {`(${remoteType})`}
+          <div className=" text-placeholderFont text-base not-italic font-normal leading-6">
+            {location}
+            {` (${remoteType})`}
           </div>
         </div>
         {/* details group */}
@@ -103,10 +102,12 @@ function JobCard({
             },
             {
               textContent:
-                "INR (₹) (" + `${salary[0]} - ${salary[1]}` + ")/ Month",
+                "INR (₹) " +
+                `${salary[0].toLocaleString()} - ${salary[1].toLocaleString()}` +
+                "/ Month",
             },
             {
-              textContent: `${totalEmployee}` + "employees",
+              textContent: `${totalEmployee} ` + "employees",
             },
           ].map(({ textContent }) => (
             <div className={divWrapper}>

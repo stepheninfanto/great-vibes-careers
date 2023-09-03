@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { FormStyles } from "../JobForm";
 
-export default function FormInput({ field, onChange, inputValue }: any) {
+export default function FormInput({
+  field,
+  onChange,
+  inputValue,
+  invalidInput,
+}: any) {
   const { input: inputStyle, label: labelStyle } = FormStyles;
 
   // Function to render different input types
@@ -11,19 +16,19 @@ export default function FormInput({ field, onChange, inputValue }: any) {
         return (
           <input
             type="text"
-            required
             className={inputStyle}
             placeholder={field.placeholder}
             name={field.name}
             value={inputValue}
             onChange={onChange}
+            maxLength={25}
+            required={field.mandatory}
           />
         );
       case "number":
         return (
           <input
             type="number"
-            required
             className={inputStyle}
             placeholder={field.placeholder}
             name={field.name}
@@ -34,16 +39,15 @@ export default function FormInput({ field, onChange, inputValue }: any) {
         );
 
       default:
-        // By default, render a text input
         return (
           <input
             type="text"
-            required
             className={inputStyle}
             placeholder={field.placeholder}
             name={field.name}
             value={inputValue}
             onChange={onChange}
+            required={field.mandatory}
           />
         );
     }
@@ -56,9 +60,19 @@ export default function FormInput({ field, onChange, inputValue }: any) {
         className={`${labelStyle} ${field.labelInVisible && "invisible"}`}
       >
         {field.label}
-        {field.mandatory && <span className="text-red-500">*</span>}
+        {field.mandatory && (
+          <>
+            <span className="text-errorFont">*</span>
+            <span
+              className={`text-errorFont text-xs p-1 ${
+                !invalidInput && "invisible"
+              }`}
+            >
+              {field.errorMessage}
+            </span>
+          </>
+        )}
       </label>
-
       {renderInput()}
     </div>
   );
