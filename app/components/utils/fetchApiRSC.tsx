@@ -2,9 +2,7 @@ import { Job } from './types/FormTypes';
 
 // get
 export const getJobsList = async () => {
-  const ENV_URL = process.env.NODE_ENV !== 'production'
-    ? 'http://localhost:3000'
-    : process.env.PROD_URL;
+  const ENV_URL = process.env.NEXT_PUBLIC_WEB_URL;
   const response = await fetch(`${ENV_URL}/api/jobDetails`, {
     next: { tags: ['jobCollection'], revalidate: 0 },
   });
