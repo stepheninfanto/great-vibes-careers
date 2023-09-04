@@ -16,6 +16,7 @@ function AppContainer({ jobsList }: Job[] | any) {
     setIsOpen(!isOpen);
     setDetails(initalState);
   };
+
   return (
     <div className="relative min-h-screen">
       <CardButton

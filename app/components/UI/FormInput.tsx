@@ -6,6 +6,7 @@ export default function FormInput({
   inputValue,
   invalidInput,
   FormStyles,
+  formErrors,
 }: any) {
   const { input: inputStyle, label: labelStyle } = FormStyles;
 
@@ -76,4 +77,28 @@ export default function FormInput({
       {renderInput()}
     </div>
   );
+
+  // return (
+  //   <div key={field.htmlFor}>
+  //     <label
+  //       htmlFor={field.htmlFor}
+  //       className={`${labelStyle} ${field.labelInVisible && "invisible"}`}
+  //     >
+  //       {field.label}
+  //       {field.mandatory && (
+  //         <>
+  //           <span className="text-errorFont">*</span>
+  //           <span
+  //             className={`text-errorFont text-xs p-1 ${
+  //               formErrors[field] !== "" && "invisible"
+  //             }`}
+  //           >
+  //             {formErrors[field]}
+  //           </span>
+  //         </>
+  //       )}
+  //     </label>
+  //     {renderInput()}
+  //   </div>
+  // );
 }

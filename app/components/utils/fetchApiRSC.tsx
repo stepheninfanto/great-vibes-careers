@@ -1,9 +1,9 @@
-import { Job } from './types/FormTypes';
+import { Job } from "./types/FormTypes";
 
 // get
 export const getJobsList = async () => {
-  const response = await fetch(`${process.env.URL}/api/jobDetails`, {
-    next: { tags: ['jobCollection'], revalidate: 0 },
+  const response = await fetch(`${process.env.MY_URL}/api/jobDetails`, {
+    next: { tags: ["jobCollection"], revalidate: 0 },
   });
   const { data } = await response.json();
   return data;
@@ -12,17 +12,17 @@ export const getJobsList = async () => {
 export async function saveJobDetails(data: Job) {
   const { id, ...rest } = data;
   const options = {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(rest),
   };
-  const response = await fetch('/api/jobDetails', options);
+  const response = await fetch("/api/jobDetails", options);
   await response.json();
   return response;
 }
 // edit
 export async function editJobDetails(id: Number, data: any) {
   const options = {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(data),
   };
   const response = await fetch(`/api/jobDetails/${id}`, options);
@@ -32,7 +32,7 @@ export async function editJobDetails(id: Number, data: any) {
 
 export async function deleteJobDetails(id: Number) {
   const options = {
-    method: 'DELETE',
+    method: "DELETE",
   };
   const response = await fetch(`/api/jobDetails/${id}`, options);
   const customer = await response.json();
