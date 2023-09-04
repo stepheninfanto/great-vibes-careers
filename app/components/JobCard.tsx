@@ -102,7 +102,7 @@ function JobCard({
             {
               textContent:
                 'INR (₹) '
-                + `${salary[0].toLocaleString()} - ${salary[1].toLocaleString()}`
+                + `${salary[0]?.toLocaleString()} - ${salary[1]?.toLocaleString()}`
                 + '/ Month',
             },
             {

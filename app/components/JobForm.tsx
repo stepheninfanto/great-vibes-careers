@@ -244,9 +244,15 @@ function JobForm({
     const { name, value } = e.target;
 
     const updatedDetails: Job = { ...details };
+    let rangeIndex;
 
-    let rangeIndex = name.includes('max') ? 1 : 2;
-    rangeIndex = name.includes('min') ? 0 : 2;
+    if (name.includes('max')) {
+      rangeIndex = 1;
+    } else if (name.includes('min')) {
+      rangeIndex = 0;
+    } else {
+      rangeIndex = 2;
+    }
 
     if (rangeIndex < 2) {
       const propertyName = name.split('-')[0];
