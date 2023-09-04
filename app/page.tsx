@@ -1,6 +1,7 @@
-import AppContainer from "./components/AppContainer";
+import React from 'react';
+import AppContainer from './components/AppContainer';
 // import { AppProvider } from "./components/AppProvider";
-import { getJobsList } from "./components/utils/fetchApiRSC";
+import { getJobsList } from './components/utils/fetchApiRSC';
 
 export default async function Home() {
   const jobsList = await getJobsList();

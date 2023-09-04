@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { FormStyles } from "../JobForm";
+import React from 'react';
 
 export default function FormInput({
   field,
   onChange,
   inputValue,
   invalidInput,
+  FormStyles,
 }: any) {
   const { input: inputStyle, label: labelStyle } = FormStyles;
 
   // Function to render different input types
   const renderInput = () => {
     switch (field.inputType) {
-      case "text":
+      case 'text':
         return (
           <input
             type="text"
@@ -25,7 +25,7 @@ export default function FormInput({
             required={field.mandatory}
           />
         );
-      case "number":
+      case 'number':
         return (
           <input
             type="number"
@@ -57,7 +57,7 @@ export default function FormInput({
     <div key={field.htmlFor}>
       <label
         htmlFor={field.htmlFor}
-        className={`${labelStyle} ${field.labelInVisible && "invisible"}`}
+        className={`${labelStyle} ${field.labelInVisible && 'invisible'}`}
       >
         {field.label}
         {field.mandatory && (
@@ -65,7 +65,7 @@ export default function FormInput({
             <span className="text-errorFont">*</span>
             <span
               className={`text-errorFont text-xs p-1 ${
-                !invalidInput && "invisible"
+                !invalidInput && 'invisible'
               }`}
             >
               {field.errorMessage}

@@ -1,34 +1,29 @@
-import React from "react";
+import React from 'react';
 
-export enum VariantType {
-  Primary = "primary",
-  Secondary = "secondary",
-}
+export type Variant = 'primary' | 'secondary';
 
 type BtnInput = {
   onClick: any;
-  variant?: VariantType;
+  variant: Variant;
   btnText: string;
 };
 
-type Styles = {
-  [key in VariantType]: string;
-};
-
-const styles: Styles = {
-  primary: "bg-primaryColor text-whiteFont rounded-md px-4 py-2",
+const styles = {
+  primary: 'bg-primaryColor text-whiteFont rounded-md px-4 py-2',
   secondary:
-    "border border-solid border-primaryColor text-primaryColor rounded-md px-4 py-2",
+    'border border-solid border-primaryColor text-primaryColor rounded-md px-4 py-2',
 };
 
 export function CardButton({
   onClick,
-  variant = VariantType.Primary,
+  variant = 'primary',
   btnText,
 }: BtnInput) {
   return (
     <div>
       <button
+        type="button"
+        tabIndex={0}
         onClick={onClick}
         className={`flex content-center shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]
        ${styles[variant]}`}

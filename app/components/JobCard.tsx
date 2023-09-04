@@ -1,14 +1,11 @@
-"use client";
-import React, { Dispatch } from "react";
-import Image from "next/image";
-import {
-  deleteJobDetails,
-  editJobDetails,
-  getJobsList,
-} from "./utils/fetchApiRSC";
-import { Job } from "./utils/types/FormTypes";
-import { CardButton, VariantType } from "./UI/Button";
-import { useRouter } from "next/navigation";
+'use client';
+
+import React, { Dispatch } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { deleteJobDetails } from './utils/fetchApiRSC';
+import { Job } from './utils/types/FormTypes';
+import { CardButton, Variant } from './UI/Button';
 
 function JobCard({
   jobData,
@@ -20,14 +17,16 @@ function JobCard({
   setDetails: Dispatch<Job>;
 }) {
   const CardStyles = {
-    divWrapper: "flex flex-col items-start gap-2 self-stretch",
-    textWrapper: "text-[#212427] text-base not-italic font-normal leading-6",
+    divWrapper: 'flex flex-col items-start gap-2 self-stretch',
+    textWrapper: 'text-[#212427] text-base not-italic font-normal leading-6',
     cardContainer:
-      "flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] border rounded-[10px] border-solid  border-cardBorder",
-    cardLogo: "h-12 w-12 flex flex-col",
+      'flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] border rounded-[10px] border-solid  border-cardBorder',
+    cardLogo: 'h-12 w-12 flex flex-col',
   };
 
-  const { divWrapper, textWrapper, cardContainer, cardLogo } = CardStyles;
+  const {
+    divWrapper, textWrapper, cardContainer, cardLogo,
+  } = CardStyles;
   const router = useRouter();
 
   const {
@@ -43,24 +42,24 @@ function JobCard({
     applyType,
   } = jobData;
 
-  const deleteJob = async (id: Number) => {
-    const response = await deleteJobDetails(id);
+  const deleteJob = async () => {
+    await deleteJobDetails(id);
     router.refresh();
   };
 
-  const editJob = async (id: Number) => {
+  const editJob = async () => {
     setIsOpen(true);
     setDetails(jobData);
   };
 
-  const onApply = (e: any) => {};
+  const onApply = (e: MouseEvent) => {};
 
-  let btnText = "Apply Now";
-  let variantType: VariantType = VariantType.Primary;
+  let btnText = 'Apply Now';
+  let variantType: Variant = 'primary';
 
-  if (applyType !== "Quick Apply") {
-    btnText = "External Apply";
-    variantType = VariantType.Secondary;
+  if (applyType !== 'Quick Apply') {
+    btnText = 'External Apply';
+    variantType = 'secondary';
   }
 
   return (
@@ -71,7 +70,7 @@ function JobCard({
           src="/netflix.svg"
           width={500}
           height={500}
-          alt="Picture of the author"
+          alt="Picture of the logo"
         />
       </section>
       <div className="flex flex-col space-y-6">
@@ -92,22 +91,22 @@ function JobCard({
         <div className="items-start flex flex-col gap-2 relative">
           {[
             {
-              textContent: "Part-Time (9.00 am - 5.00 pm IST)",
+              textContent: 'Part-Time (9.00 am - 5.00 pm IST)',
             },
             {
               textContent:
-                "Experience (" +
-                `${experience[0]} - ${experience[1]}` +
-                ") years",
+                'Experience ('
+                + `${experience[0]} - ${experience[1]}`
+                + ') years',
             },
             {
               textContent:
-                "INR (₹) " +
-                `${salary[0].toLocaleString()} - ${salary[1].toLocaleString()}` +
-                "/ Month",
+                'INR (₹) '
+                + `${salary[0].toLocaleString()} - ${salary[1].toLocaleString()}`
+                + '/ Month',
             },
             {
-              textContent: `${totalEmployee} ` + "employees",
+              textContent: `${totalEmployee} employees`,
             },
           ].map(({ textContent }) => (
             <div className={divWrapper}>
@@ -125,9 +124,18 @@ function JobCard({
       </div>
       <div className="ml-auto flex space-x-2">
         <button
-          onClick={() => editJob(id)}
-          className="hover:bg-cardBorder p-1 rounded"
+          type="button"
+          tabIndex={0}
+          onClick={() => editJob()}
+          className="hover:bg-cardBorder p-1 rounded "
         >
+          {/* <Image
+            src="/edit.svg"
+            width={500}
+            height={500}
+            alt="Picture of the edit icon"
+          /> */}
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -145,7 +153,9 @@ function JobCard({
         </button>
 
         <button
-          onClick={() => deleteJob(id)}
+          type="button"
+          tabIndex={0}
+          onClick={() => deleteJob()}
           className="hover:bg-cardBorder p-1 rounded"
         >
           <svg

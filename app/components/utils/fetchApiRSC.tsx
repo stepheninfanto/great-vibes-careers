@@ -1,9 +1,9 @@
-import { Job } from "./types/FormTypes";
+import { Job } from './types/FormTypes';
 
-//get
+// get
 export const getJobsList = async () => {
-  const response = await fetch(process.env.URL + "/api/jobDetails", {
-    next: { tags: ["jobCollection"], revalidate: 0 },
+  const response = await fetch(`${process.env.URL}/api/jobDetails`, {
+    next: { tags: ['jobCollection'], revalidate: 0 },
   });
   const { data } = await response.json();
   return data;
@@ -11,18 +11,18 @@ export const getJobsList = async () => {
 // add
 export async function saveJobDetails(data: Job) {
   const { id, ...rest } = data;
-  let options = {
-    method: "POST",
+  const options = {
+    method: 'POST',
     body: JSON.stringify(rest),
   };
-  const response = await fetch("/api/jobDetails", options);
+  const response = await fetch('/api/jobDetails', options);
   await response.json();
   return response;
 }
 // edit
 export async function editJobDetails(id: Number, data: any) {
-  let options = {
-    method: "PUT",
+  const options = {
+    method: 'PUT',
     body: JSON.stringify(data),
   };
   const response = await fetch(`/api/jobDetails/${id}`, options);
@@ -31,8 +31,8 @@ export async function editJobDetails(id: Number, data: any) {
 }
 
 export async function deleteJobDetails(id: Number) {
-  let options = {
-    method: "DELETE",
+  const options = {
+    method: 'DELETE',
   };
   const response = await fetch(`/api/jobDetails/${id}`, options);
   const customer = await response.json();
