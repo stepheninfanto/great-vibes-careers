@@ -3,33 +3,33 @@ import React, {
   Dispatch,
   useEffect,
   useState,
-} from 'react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import { editJobDetails, saveJobDetails } from './utils/fetchApiRSC';
-import { Job } from './utils/types/FormTypes';
-import FormInput from './UI/FormInput';
-import { CardButton } from './UI/Button';
+} from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { editJobDetails, saveJobDetails } from "./utils/fetchApiRSC";
+import { Job } from "./utils/types/FormTypes";
+import FormInput from "./UI/FormInput";
+import { CardButton } from "./UI/Button";
 import {
   additonalFormFieldsStep1,
   additonalFormFieldsStep2,
   formFieldsStep1,
   formFieldsStep2,
-} from './UI/Constants';
+} from "./UI/Constants";
 
 export const FormStyles = {
   input:
-    'flex w-full items-start gap-2.5 self-stretch border border-cardBorder px-3 py-2 rounded-[5px] border-solid bg-cardColor',
-  label: 'text-darkFont text-sm font-semibold leading-5 gap-2',
-  titleText: 'text-xl not-italic font-medium leading-7 text-darkFont',
+    "flex w-full items-start gap-2.5 self-stretch border border-cardBorder px-3 py-2 rounded-[5px] border-solid bg-cardColor",
+  label: "text-darkFont text-sm font-semibold leading-5 gap-2",
+  titleText: "text-xl not-italic font-medium leading-7 text-darkFont",
   stepText:
-    'text-darkFont text-right text-base not-italic font-medium leading-6',
-  dualDiv: 'flex flex-row gap-6',
-  radio: 'w-5 h-5',
-  divBtn: 'flex flex-row-reverse',
+    "text-darkFont text-right text-base not-italic font-medium leading-6",
+  dualDiv: "flex flex-row gap-6",
+  radio: "w-5 h-5",
+  divBtn: "flex flex-row-reverse",
 };
 
-type FormFieldProps = {
+export type FormFieldProps = {
   htmlFor: string;
   label: string;
   placeholder: string;
@@ -46,12 +46,10 @@ interface StepProps {
   handleChange: ChangeEventHandler<HTMLInputElement>;
   handleStepChange: ChangeEventHandler<HTMLInputElement>;
   details: Job;
+  errors: any;
 }
 
-interface Step1Props extends StepProps {
-  errors: any;
-  formErrors: any;
-}
+interface Step1Props extends StepProps {}
 
 interface Step2Props extends StepProps {
   applyType: string;
@@ -65,17 +63,12 @@ function Step1({
   handleStepChange,
   details,
   errors,
-  formErrors,
 }: Step1Props) {
   return (
     <>
       <div className="space-y-6">
         <div className="flex justify-between text-darkFont">
-          <p className={`${FormStyles.titleText}`}>
-            {mode}
-            {' '}
-            a job
-          </p>
+          <p className={`${FormStyles.titleText}`}>{mode} a job</p>
           <p className={`${FormStyles.stepText}`}>Step 1</p>
         </div>
 
@@ -87,7 +80,6 @@ function Step1({
             invalidInput={errors[field.name]}
             onChange={handleChange}
             FormStyles={FormStyles}
-            formErrors={formErrors}
           />
         ))}
 
@@ -105,12 +97,14 @@ function Step1({
                   field={field1}
                   onChange={handleChange}
                   inputValue={details[field1.name]}
+                  invalidInput={errors[field1.name]}
                   FormStyles={FormStyles}
                 />
                 <FormInput
                   field={field2}
                   FormStyles={FormStyles}
                   onChange={handleChange}
+                  invalidInput={errors[field2.name]}
                   inputValue={details[field2.name]}
                 />
               </div>
@@ -136,15 +130,14 @@ function Step2({
   handleStepChange,
   applyType,
   details,
+  errors,
 }: Step2Props) {
   return (
     <>
       <div className="space-y-6">
         <div className="flex flex-row space-x-2 ">
           <div className="w-1/2 text-xl font-normal leading-7 text-darkFont">
-            {mode}
-            {' '}
-            a job
+            {mode} a job
           </div>
           <div className="w-1/2 flex flex-row-reverse">Step 2</div>
         </div>
@@ -161,12 +154,14 @@ function Step2({
                 field={field1}
                 FormStyles={FormStyles}
                 onChange={handleChange}
+                invalidInput={errors[field1.htmlFor]}
                 inputValue={(details[field1.htmlFor] as Number[])[0]}
               />
               <FormInput
                 field={field2}
                 FormStyles={FormStyles}
                 onChange={handleChange}
+                invalidInput={errors[field2.htmlFor]}
                 inputValue={(details[field2.htmlFor] as Number[])[1]}
               />
             </div>
@@ -174,15 +169,16 @@ function Step2({
 
         <FormInput
           field={{
-            htmlFor: 'totalEmployee',
-            placeholder: 'ex: 100',
-            name: 'totalEmployee',
-            label: 'Total Employee',
+            htmlFor: "totalEmployee",
+            placeholder: "ex: 100",
+            name: "totalEmployee",
+            label: "Total Employee",
             mandatory: false,
           }}
           FormStyles={FormStyles}
           onChange={handleChange}
           inputValue={details.totalEmployee}
+          invalidInput={errors.totalEmployee}
         />
 
         <div>
@@ -230,120 +226,104 @@ function JobForm({
   details: Job;
   setDetails: Dispatch<any>;
 }) {
-  const [step, setStep] = useState('1');
-  const [mode, setMode] = useState('Edit');
-  const [errors, setErrors] = useState({
-    jobTitle: false,
-    companyName: false,
-    industryName: false,
-  });
+  const [step, setStep] = useState("1");
+  const [mode, setMode] = useState("Edit");
+  const [errors, setErrors] = useState({});
 
   const router = useRouter();
-  const [formErrors, setFormErrors] = useState({});
   useEffect(() => {
-    setMode(details.id === 0 ? 'Create' : 'Edit');
+    setMode(details.id === 0 ? "Create" : "Edit");
   }, [details.id]);
 
-  // const validateFields = () => {
-  //   const mandatoryFields: string[] = [
-  //     "jobTitle",
-  //     "companyName",
-  //     "industryName",
-  //   ];
+  const checkValidFields = (field: string) => {
+    const newErrors: any = {};
+    const pattern = /[a-zA-Z]/;
+    let isValid: boolean = true;
 
-  //   for (let i = 0; i < mandatoryFields.length; i += 1) {
-  //     const field = mandatoryFields[i];
-  //     const newErrors: any = { ...errors };
-  //     if (details[field] === "") {
-  //       newErrors[mandatoryFields[i]] = true;
-  //       setErrors(newErrors);
-  //       return false;
-  //     }
-  //     newErrors[mandatoryFields[i]] = false;
-  //   }
+    if (step === "2" && (field === "experience" || field === "salary")) {
+      const arr: Number[] = details[field] as Number[];
+      if (!arr || arr?.length === 0) {
+        arr.length = 2;
+        arr[0] = 0;
+      }
+      if (arr[0] > arr[1]) {
+        newErrors[field] = true;
+        isValid = false;
+      } else {
+        newErrors[field] = false;
+      }
+    } else if (!pattern.test(details[field] as any)) {
+      newErrors[field] = true;
+      isValid = false;
+    } else {
+      newErrors[field] = false;
+    }
 
-  //   for (let i = 0; i < mandatoryFields.length; i += 1) {
-  //     const field = mandatoryFields[i];
-  //     const newErrors: any = { ...formErrors };
-  //     if (details[field] === "") {
-  //       newErrors[mandatoryFields[i]] = "field is required";
-  //       setFormErrors(newErrors);
-  //     }
-  //     newErrors[mandatoryFields[i]] = false;
-  //   }
+    setErrors({ ...errors, ...newErrors });
 
-  //   return true;
-  // };
+    return isValid;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
+    let propertyName = name;
     const updatedDetails: Job = { ...details };
-    let rangeIndex;
+    let rangeIndex = -1;
 
-    if (name.includes('max')) {
+    if (name.includes("max")) {
       rangeIndex = 1;
-    } else if (name.includes('min')) {
+    } else if (name.includes("min")) {
       rangeIndex = 0;
     } else {
       rangeIndex = 2;
     }
 
     if (rangeIndex < 2) {
-      const propertyName = name.split('-')[0];
+      [propertyName] = name.split("-");
       const rangeList = updatedDetails[propertyName] as Array<number>;
       rangeList[rangeIndex] = Number(value);
       updatedDetails[propertyName] = rangeList;
     } else {
-      updatedDetails[name] = value;
+      updatedDetails[propertyName] = value;
     }
-
     setDetails(updatedDetails);
+    checkValidFields(propertyName);
   };
 
   const validateFields = () => {
-    const pattern = /[a-zA-Z]/;
     const mandatoryFields: string[] = [
-      'jobTitle',
-      'companyName',
-      'industryName',
+      "jobTitle",
+      "companyName",
+      "industryName",
     ];
-    let flag = true;
-    const newErrors: any = { ...errors };
-    for (let i = 0; i < mandatoryFields.length; i += 1) {
-      const field = mandatoryFields[i];
-      if (!pattern.test(details[field] as any)) {
-        newErrors[mandatoryFields[i]] = true;
-        flag = false;
-      } else {
-        newErrors[mandatoryFields[i]] = false;
-      }
-    }
 
-    setErrors(newErrors);
+    const result = mandatoryFields
+      .map((ele) => checkValidFields(ele))
+      .filter((field) => field !== true);
 
-    return flag;
+    return result.length === 0;
   };
 
   const handleStepChange = async () => {
-    if (step === '2') {
+    if (!validateFields()) {
+      return;
+    }
+    if (step === "2") {
       setIsOpen(false);
       const { id } = details;
       await (id === 0 ? saveJobDetails(details) : editJobDetails(id, details));
-      toast('Changes saved successfully');
+      toast("Changes saved successfully");
       router.refresh();
       return;
     }
-    if (validateFields()) {
-      setStep(String(Number(step) + 1));
-    }
+    setStep(String(Number(step) + 1));
   };
 
   const { applyType } = details;
 
   const selectStep = () => {
     switch (step) {
-      case '1':
+      case "1":
         return (
           <Step1
             mode={mode}
@@ -353,10 +333,9 @@ function JobForm({
             handleStepChange={handleStepChange}
             details={details}
             errors={errors}
-            formErrors={formErrors}
           />
         );
-      case '2':
+      case "2":
         return (
           <Step2
             mode={mode}
@@ -366,6 +345,7 @@ function JobForm({
             handleStepChange={handleStepChange}
             details={details}
             applyType={applyType}
+            errors={errors}
           />
         );
       default:
@@ -377,7 +357,7 @@ function JobForm({
     <form
       className={`fixed inset-0 flex items-center justify-center z-50 
       bg-white rounded-md p-8  drop-shadow-lg ${
-        isOpen ? 'visible' : 'hidden'
+        isOpen ? "visible" : "hidden"
       } `}
       onSubmit={(e) => e.preventDefault()}
     >
@@ -386,7 +366,7 @@ function JobForm({
         className="fixed inset-0 bg-black opacity-50"
         onClick={() => setIsOpen(false)}
         onKeyDown={(e) => {
-          if (e.key === 'Escape') {
+          if (e.key === "Escape") {
             setIsOpen(false);
           }
         }}

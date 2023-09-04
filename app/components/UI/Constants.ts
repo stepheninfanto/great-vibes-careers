@@ -6,7 +6,6 @@ export const formFieldsStep1 = [
     name: 'jobTitle',
     mandatory: true,
     inputType: 'text',
-    errorMessage: 'Please enter your job title',
   },
   {
     htmlFor: 'companyName',
@@ -15,7 +14,6 @@ export const formFieldsStep1 = [
     name: 'companyName',
     mandatory: true,
     inputType: 'text',
-    errorMessage: 'please enter your company name',
   },
   {
     htmlFor: 'Industry',
@@ -24,7 +22,6 @@ export const formFieldsStep1 = [
     name: 'industryName',
     mandatory: true,
     inputType: 'text',
-    errorMessage: 'please enter your industry name',
   },
 ];
 
