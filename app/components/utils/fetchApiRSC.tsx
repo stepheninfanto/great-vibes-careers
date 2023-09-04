@@ -2,7 +2,10 @@ import { Job } from './types/FormTypes';
 
 // get
 export const getJobsList = async () => {
-  const response = await fetch(`${process.env.MY_URL}/api/jobDetails`, {
+  const ENV_URL = process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:3000'
+    : process.env.PROD_URL;
+  const response = await fetch(`${ENV_URL}/api/jobDetails`, {
     next: { tags: ['jobCollection'], revalidate: 0 },
   });
   const { data } = await response.json();

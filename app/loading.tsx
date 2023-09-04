@@ -1,7 +1,11 @@
-import React from 'react';
+import React from "react";
 
 function loading() {
-  return <div className="w-full h-full">loading...</div>;
+  return (
+    <main className="w-min-screen  min-h-screen bg-cardBorder flex justify-center items-center">
+      loading...
+    </main>
+  );
 }
 
 export default loading;
