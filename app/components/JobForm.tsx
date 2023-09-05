@@ -1,4 +1,5 @@
 import React, {
+  ChangeEvent,
   ChangeEventHandler,
   Dispatch,
   useEffect,
@@ -49,7 +50,9 @@ interface StepProps {
   errors: any;
 }
 
-interface Step1Props extends StepProps {}
+interface Step1Props extends StepProps {
+  checkValidFields: any;
+}
 
 interface Step2Props extends StepProps {
   applyType: string;
@@ -63,6 +66,7 @@ function Step1({
   handleStepChange,
   details,
   errors,
+  checkValidFields,
 }: Step1Props) {
   return (
     <>
@@ -235,6 +239,7 @@ function JobForm({
   const [step, setStep] = useState('1');
   const [mode, setMode] = useState('Edit');
   const [errors, setErrors] = useState({});
+  const [propertyName, setPropertyName] = useState('');
 
   const router = useRouter();
   useEffect(() => {
@@ -243,36 +248,66 @@ function JobForm({
 
   const checkValidFields = (field: string) => {
     const newErrors: any = {};
-    const pattern = /[a-zA-Z]/;
+    const pattern = /[ a-zA-Z]/g;
     let isValid: boolean = true;
+    const arr: Number[] = details[field] as Number[];
 
-    if (step === '2' && (field === 'experience' || field === 'salary')) {
-      const arr: Number[] = details[field] as Number[];
-      if (!arr || arr?.length === 0) {
-        arr.length = 2;
-        arr[0] = 0;
-      }
-      if (arr[0] > arr[1]) {
-        newErrors[field] = true;
-        isValid = false;
-      } else {
-        newErrors[field] = false;
-      }
-    } else if (!pattern.test(details[field] as any)) {
-      newErrors[field] = true;
-      isValid = false;
-    } else {
-      newErrors[field] = false;
+    switch (step) {
+      case '2':
+        switch (field) {
+          case 'experience':
+          case 'salary':
+            if (!arr || arr?.length === 0) {
+              arr.length = 2;
+              arr[0] = 0;
+            }
+            if (arr[0] > arr[1]) {
+              newErrors[field] = true;
+              isValid = false;
+            } else {
+              newErrors[field] = false;
+            }
+            break;
+          case 'totalEmployee':
+            if (details[field] === '') {
+              newErrors[field] = true;
+              isValid = false;
+            } else {
+              newErrors[field] = false;
+            }
+            break;
+          default:
+            if (!pattern.test(details[field] as any)) {
+              newErrors[field] = true;
+              isValid = false;
+            } else {
+              newErrors[field] = false;
+            }
+        }
+        break;
+      default:
+        if (!pattern.test(details[field] as any)) {
+          newErrors[field] = true;
+          isValid = false;
+        } else {
+          newErrors[field] = false;
+        }
     }
 
-    setErrors({ ...errors, ...newErrors });
+    setErrors((prevErrors) => ({ ...prevErrors, ...newErrors }));
 
     return isValid;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (propertyName !== '') {
+      checkValidFields(propertyName);
+    }
+  }, [details]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    let propertyName = name;
+    let propsName = name;
     const updatedDetails: Job = { ...details };
     let rangeIndex = -1;
 
@@ -285,15 +320,15 @@ function JobForm({
     }
 
     if (rangeIndex < 2) {
-      [propertyName] = name.split('-');
-      const rangeList = updatedDetails[propertyName] as Array<number>;
+      [propsName] = name.split('-');
+      const rangeList = updatedDetails[propsName] as Array<number>;
       rangeList[rangeIndex] = Number(value);
-      updatedDetails[propertyName] = rangeList;
+      updatedDetails[propsName] = rangeList;
     } else {
-      updatedDetails[propertyName] = value;
+      updatedDetails[propsName] = value;
     }
+    setPropertyName(propsName);
     setDetails(updatedDetails);
-    checkValidFields(propertyName);
   };
 
   const validateFields = () => {
@@ -318,8 +353,8 @@ function JobForm({
       setIsOpen(false);
       const { id } = details;
       await (id === 0 ? saveJobDetails(details) : editJobDetails(id, details));
-      toast('Changes saved successfully');
       router.refresh();
+      toast('Changes saved successfully');
       return;
     }
     setStep(String(Number(step) + 1));
@@ -339,6 +374,7 @@ function JobForm({
             handleStepChange={handleStepChange}
             details={details}
             errors={errors}
+            checkValidFields={checkValidFields}
           />
         );
       case '2':

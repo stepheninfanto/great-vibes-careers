@@ -60,15 +60,11 @@ export default function FormInput({
         className={`${labelStyle} ${field.labelInVisible && 'invisible'}`}
       >
         {field.label}
-        {(field.mandatory || true) && (
-          <>
-            <span className="text-errorFont">*</span>
-            {invalidInput && (
-              <span className="text-errorFont text-xs">
-                {`Please Enter Valid ${field.label}`}
-              </span>
-            )}
-          </>
+        {field.mandatory && <span className="text-errorFont">*</span>}
+        {invalidInput && (
+          <span className="text-errorFont text-xs">
+            {`Please Enter Valid ${field.label}`}
+          </span>
         )}
       </label>
       {renderInput()}

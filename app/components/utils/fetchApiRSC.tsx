@@ -3,7 +3,7 @@ import { Job } from './types/FormTypes';
 // get
 export const getJobsList = async () => {
   const ENV_URL = process.env.NEXT_PUBLIC_WEB_URL;
-  console.log(ENV_URL);
+  console.log({ ENV_URL }); // TO CHECK POPULATE
   const response = await fetch(`${ENV_URL}/api/jobDetails`, {
     next: { tags: ['jobCollection'], revalidate: 0 },
   });

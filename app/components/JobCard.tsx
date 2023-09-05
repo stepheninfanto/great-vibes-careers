@@ -45,8 +45,8 @@ function JobCard({
 
   const deleteJob = async () => {
     await deleteJobDetails(id);
-    toast('Job post deleted successfully');
     router.refresh();
+    toast('Job post deleted successfully');
   };
 
   const editJob = async () => {
@@ -136,7 +136,7 @@ function JobCard({
             imageUrl: '/delete.svg',
             altText: 'Delete',
           },
-        ].map((item, i) => (
+        ].map((item) => (
           <button
             key={item.altText}
             type="button"
