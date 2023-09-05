@@ -16,6 +16,7 @@ import {
   additonalFormFieldsStep2,
   formFieldsStep1,
   formFieldsStep2,
+  initalState,
 } from './UI/Constants';
 
 export const FormStyles = {
@@ -189,10 +190,22 @@ function Step2({
         />
 
         <div>
-          <p className={`${FormStyles.label}`}>Apply Type</p>
+          <p className={`${FormStyles.label}`}>
+            Apply Type
+            {errors.applyType && (
+              <span className="text-errorFont"> Enter valid Apply Type</span>
+            )}
+          </p>
+
           <div className="flex flex-row text-sm not-italic font-normal leading-5 space-x-2 py-2">
             {additonalFormFields.map((applyEle) => (
-              <div className="flex items-center" key={applyEle.label}>
+              <div
+                className="flex flex-row-reverse items-center"
+                key={applyEle.label}
+              >
+                <label className="p-1 flex justify-center text-placeholderFont">
+                  {applyEle.label}
+                </label>
                 <input
                   type="radio"
                   className={`${FormStyles.radio}`}
@@ -203,9 +216,6 @@ function Step2({
                   checked={applyType === applyEle.label}
                   onChange={handleChange}
                 />
-                <p className="p-1 flex justify-center text-placeholderFont">
-                  {applyEle.label}
-                </p>
               </div>
             ))}
           </div>
@@ -248,18 +258,30 @@ function JobForm({
     const pattern = /[a-zA-Z\s-]/g;
     const specialPattern = /[a-zA-Z0-9\s-]+/g;
     let isValid: boolean = true;
-    const arr: Number[] = details[field] as Number[];
-
+    const arr: Number[] = details[field] as number[];
+    console.log(arr);
+    console.log(field);
     switch (step) {
       case '2':
         switch (field) {
           case 'experience':
+            if (
+              Number(arr[0]) > Number(arr[1])
+              || Number(arr[0]) > 100
+              || Number(arr[1]) > 100
+            ) {
+              newErrors[field] = true;
+              isValid = false;
+            } else {
+              newErrors[field] = false;
+            }
+            break;
           case 'salary':
             if (!arr || arr?.length === 0) {
               arr.length = 2;
               arr[0] = 0;
             }
-            if (arr[0] > arr[1]) {
+            if (arr[0] >= arr[1]) {
               newErrors[field] = true;
               isValid = false;
             } else {
@@ -267,7 +289,7 @@ function JobForm({
             }
             break;
           case 'totalEmployee':
-            if (!specialPattern.test(field)) {
+            if (!specialPattern.test(details[field])) {
               newErrors[field] = true;
               isValid = false;
             } else {
@@ -292,6 +314,7 @@ function JobForm({
         }
     }
 
+    console.log({ field, isValid });
     setErrors((prevErrors) => ({ ...prevErrors, ...newErrors }));
 
     return isValid;
@@ -333,7 +356,7 @@ function JobForm({
     const result = fieldList
       .map((ele) => checkValidFields(ele))
       .filter((field) => field !== true);
-
+    console.log(result);
     return result.length === 0;
   };
 
@@ -344,7 +367,12 @@ function JobForm({
       'industryName',
     ];
 
-    const step2Fields: string[] = ['experience', 'salary', 'totalEmployee'];
+    const step2Fields: string[] = [
+      'experience',
+      'salary',
+      'totalEmployee',
+      'applyType',
+    ];
 
     const fieldList = step === '1' ? mandatoryFields : step2Fields;
 
@@ -354,8 +382,12 @@ function JobForm({
     if (step === '2') {
       setIsOpen(false);
       const { id } = details;
-      await (id === 0 ? saveJobDetails(details) : editJobDetails(id, details));
+      const result = await (id === 0
+        ? saveJobDetails(details)
+        : editJobDetails(id, details));
       router.refresh();
+      setDetails(initalState);
+      console.log(result);
       toast('Changes saved successfully');
       return;
     }

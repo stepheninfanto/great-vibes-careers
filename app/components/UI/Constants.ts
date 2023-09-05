@@ -91,8 +91,8 @@ export const initalState = {
   industryName: '',
   location: '',
   remoteType: '',
-  experience: [],
-  salary: [],
+  experience: [0, 0],
+  salary: [0, 0],
   totalEmployee: '',
   applyType: '',
 };
