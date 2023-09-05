@@ -203,7 +203,10 @@ function Step2({
                 className="flex flex-row-reverse items-center"
                 key={applyEle.label}
               >
-                <label className="p-1 flex justify-center text-placeholderFont">
+                <label
+                  className="p-1 flex justify-center text-placeholderFont"
+                  htmlFor="applyType"
+                >
                   {applyEle.label}
                 </label>
                 <input
@@ -259,8 +262,6 @@ function JobForm({
     const specialPattern = /[a-zA-Z0-9\s-]+/g;
     let isValid: boolean = true;
     const arr: Number[] = details[field] as number[];
-    console.log(arr);
-    console.log(field);
     switch (step) {
       case '2':
         switch (field) {
@@ -314,7 +315,6 @@ function JobForm({
         }
     }
 
-    console.log({ field, isValid });
     setErrors((prevErrors) => ({ ...prevErrors, ...newErrors }));
 
     return isValid;
@@ -356,7 +356,6 @@ function JobForm({
     const result = fieldList
       .map((ele) => checkValidFields(ele))
       .filter((field) => field !== true);
-    console.log(result);
     return result.length === 0;
   };
 
@@ -385,9 +384,8 @@ function JobForm({
       const result = await (id === 0
         ? saveJobDetails(details)
         : editJobDetails(id, details));
-      router.refresh();
       setDetails(initalState);
-      console.log(result);
+      router.refresh();
       toast('Changes saved successfully');
       return;
     }
