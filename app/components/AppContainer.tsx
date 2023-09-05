@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import JobForm from './JobForm';
-import JobCard from './JobCard';
-import { Job } from './utils/types/FormTypes';
-import { CardButton } from './UI/Button';
-import { initalState } from './UI/Constants';
+import React, { useState } from "react";
+import JobForm from "./JobForm";
+import JobCard from "./JobCard";
+import { Job } from "./utils/types/FormTypes";
+import { CardButton } from "./UI/Button";
+import { initalState } from "./UI/Constants";
 
 function AppContainer({ jobsList }: Job[] | any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +17,8 @@ function AppContainer({ jobsList }: Job[] | any) {
     setDetails(initalState);
   };
 
+  console.log(jobsList);
+
   return (
     <div className="relative min-h-screen">
       <CardButton
@@ -25,27 +27,27 @@ function AppContainer({ jobsList }: Job[] | any) {
         variant="primary"
       />
 
-      {isOpen && (
+      {/* {isOpen && (
         <JobForm
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           details={details}
           setDetails={setDetails}
         />
-      )}
+      )} */}
 
       {/* canvas */}
-      <div className="grid lg:grid-cols-2 sm:grid-cols-1 pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] gap-7 ">
+      {/* <div className="grid lg:grid-cols-2 sm:grid-cols-1 pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] gap-7 ">
         {jobsList.map((item: Job) => (
           <div key={item.id} className="flex">
-            {/* <JobCard
+            <JobCard
               jobData={item}
               setIsOpen={setIsOpen}
               setDetails={setDetails}
-            /> */}
+            />
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
