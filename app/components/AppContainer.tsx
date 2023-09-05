@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import JobForm from "./JobForm";
-import JobCard from "./JobCard";
-import { Job } from "./utils/types/FormTypes";
-import { CardButton } from "./UI/Button";
-import { initalState } from "./UI/Constants";
+import React, { useState } from 'react';
+import JobForm from './JobForm';
+import JobCard from './JobCard';
+import { Job } from './utils/types/FormTypes';
+import { CardButton } from './UI/Button';
+import { initalState } from './UI/Constants';
 
 function AppContainer({ jobsList }: Job[] | any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +18,11 @@ function AppContainer({ jobsList }: Job[] | any) {
   };
 
   console.log(jobsList);
+
+  const styles = {
+    gridContainer:
+      'grid lg:grid-cols-2 sm:grid-cols-1 pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] gap-7',
+  };
 
   return (
     <div className="relative min-h-screen">
@@ -37,7 +42,7 @@ function AppContainer({ jobsList }: Job[] | any) {
       )} */}
 
       {/* canvas */}
-      {/* <div className="grid lg:grid-cols-2 sm:grid-cols-1 pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] gap-7 ">
+      {/* <div className={styles.gridContainer}>
         {jobsList.map((item: Job) => (
           <div key={item.id} className="flex">
             <JobCard
