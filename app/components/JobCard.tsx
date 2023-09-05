@@ -23,10 +23,11 @@ function JobCard({
     cardContainer:
       'flex items-start gap-2.5 self-stretch px-6 py-4 bg-cardColor w-[728px] border rounded-[10px] border-solid  border-cardBorder',
     cardLogo: 'h-12 w-12 flex flex-col',
+    divGroup: 'items-start flex flex-col relative',
   };
 
   const {
-    divWrapper, textWrapper, cardContainer, cardLogo,
+    divWrapper, textWrapper, cardContainer, cardLogo, divGroup,
   } = CardStyles;
   const router = useRouter();
 
@@ -65,7 +66,7 @@ function JobCard({
   }
 
   return (
-    <div className={cardContainer} key={id}>
+    <div className={cardContainer}>
       {/* logo section  */}
       <section className={cardLogo}>
         <Image
@@ -75,9 +76,9 @@ function JobCard({
           alt="Picture of the logo"
         />
       </section>
-      <div className="flex flex-col space-y-6">
+      <section className="flex flex-col space-y-6">
         {/* about group */}
-        <div className="items-start inline-flex flex-col relative">
+        <div className={divGroup}>
           <div className="text-black text-2xl not-italic font-normal leading-8">
             {jobTitle}
           </div>
@@ -90,28 +91,32 @@ function JobCard({
           </div>
         </div>
         {/* details group */}
-        <div className="items-start flex flex-col gap-2 relative">
+        <div className={`${divGroup} gap-2`}>
           {[
             {
+              renderId: 1,
               textContent: 'Part-Time (9.00 am - 5.00 pm IST)',
             },
             {
+              renderId: 2,
               textContent:
                 'Experience ('
                 + `${experience[0]} - ${experience[1]}`
                 + ') years',
             },
             {
+              renderId: 3,
               textContent:
                 'INR (₹) '
                 + `${salary[0]?.toLocaleString()} - ${salary[1]?.toLocaleString()}`
                 + '/ Month',
             },
             {
+              renderId: 4,
               textContent: `${totalEmployee} employees`,
             },
-          ].map(({ textContent }) => (
-            <div className={divWrapper}>
+          ].map(({ textContent, renderId }) => (
+            <div className={divWrapper} key={renderId}>
               <p className={textWrapper}>{textContent}</p>
             </div>
           ))}
@@ -123,8 +128,8 @@ function JobCard({
             onClick={onApply}
           />
         </div>
-      </div>
-      <div className="ml-auto flex space-x-2">
+      </section>
+      <section className="ml-auto flex space-x-2">
         {[
           {
             onClickHandler: editJob,
@@ -154,7 +159,7 @@ function JobCard({
             </div>
           </button>
         ))}
-      </div>
+      </section>
     </div>
   );
 }

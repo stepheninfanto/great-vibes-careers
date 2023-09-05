@@ -17,8 +17,6 @@ function AppContainer({ jobsList }: Job[] | any) {
     setDetails(initalState);
   };
 
-  console.log(jobsList);
-
   const styles = {
     gridContainer:
       'grid lg:grid-cols-2 sm:grid-cols-1 pl-[85px] pr-[44.882px] pt-[30px] pb-[49px] gap-7',
@@ -42,7 +40,7 @@ function AppContainer({ jobsList }: Job[] | any) {
       )}
 
       {/* canvas */}
-      {/* <div className={styles.gridContainer}>
+      <div className={styles.gridContainer}>
         {jobsList.map((item: Job) => (
           <div key={item.id} className="flex">
             <JobCard
@@ -52,7 +50,7 @@ function AppContainer({ jobsList }: Job[] | any) {
             />
           </div>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 }

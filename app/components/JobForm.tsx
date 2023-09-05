@@ -245,7 +245,8 @@ function JobForm({
 
   const checkValidFields = (field: string) => {
     const newErrors: any = {};
-    const pattern = /[ a-zA-Z]/g;
+    const pattern = /[a-zA-Z\s-]/g;
+    const specialPattern = /[a-zA-Z0-9\s-]+/g;
     let isValid: boolean = true;
     const arr: Number[] = details[field] as Number[];
 
@@ -266,7 +267,7 @@ function JobForm({
             }
             break;
           case 'totalEmployee':
-            if (details[field] === '') {
+            if (!specialPattern.test(field)) {
               newErrors[field] = true;
               isValid = false;
             } else {
@@ -328,14 +329,8 @@ function JobForm({
     setDetails(updatedDetails);
   };
 
-  const validateFields = () => {
-    const mandatoryFields: string[] = [
-      'jobTitle',
-      'companyName',
-      'industryName',
-    ];
-
-    const result = mandatoryFields
+  const validateFields = (fieldList: Array<string>) => {
+    const result = fieldList
       .map((ele) => checkValidFields(ele))
       .filter((field) => field !== true);
 
@@ -343,7 +338,17 @@ function JobForm({
   };
 
   const handleStepChange = async () => {
-    if (!validateFields()) {
+    const mandatoryFields: string[] = [
+      'jobTitle',
+      'companyName',
+      'industryName',
+    ];
+
+    const step2Fields: string[] = ['experience', 'salary', 'totalEmployee'];
+
+    const fieldList = step === '1' ? mandatoryFields : step2Fields;
+
+    if (!validateFields(fieldList)) {
       return;
     }
     if (step === '2') {
