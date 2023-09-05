@@ -65,7 +65,7 @@ function JobCard({
   }
 
   return (
-    <div className={cardContainer} key={Math.random()}>
+    <div className={cardContainer} key={id}>
       {/* logo section  */}
       <section className={cardLogo}>
         <Image
