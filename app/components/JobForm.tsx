@@ -50,9 +50,7 @@ interface StepProps {
   errors: any;
 }
 
-interface Step1Props extends StepProps {
-  checkValidFields: any;
-}
+interface Step1Props extends StepProps {}
 
 interface Step2Props extends StepProps {
   applyType: string;
@@ -66,7 +64,6 @@ function Step1({
   handleStepChange,
   details,
   errors,
-  checkValidFields,
 }: Step1Props) {
   return (
     <>
@@ -374,7 +371,6 @@ function JobForm({
             handleStepChange={handleStepChange}
             details={details}
             errors={errors}
-            checkValidFields={checkValidFields}
           />
         );
       case '2':

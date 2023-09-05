@@ -8,6 +8,7 @@ export const getJobsList = async () => {
     next: { tags: ['jobCollection'], revalidate: 0 },
   });
   const { data } = await response.json();
+  console.log(data);
   return data;
 };
 // add
