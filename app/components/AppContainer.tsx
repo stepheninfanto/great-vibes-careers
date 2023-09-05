@@ -26,20 +26,20 @@ function AppContainer({ jobsList }: Job[] | any) {
 
   return (
     <div className="relative min-h-screen">
-      {/* <CardButton
+      <CardButton
         onClick={handleClick}
         btnText="Create Job"
         variant="primary"
-      /> */}
+      />
 
-      {/* {isOpen && (
+      {isOpen && (
         <JobForm
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           details={details}
           setDetails={setDetails}
         />
-      )} */}
+      )}
 
       {/* canvas */}
       {/* <div className={styles.gridContainer}>
@@ -53,7 +53,6 @@ function AppContainer({ jobsList }: Job[] | any) {
           </div>
         ))}
       </div> */}
-      testContainer
     </div>
   );
 }
