@@ -259,7 +259,7 @@ function JobForm({
   const checkValidFields = (field: string) => {
     const newErrors: any = {};
     const pattern = /[a-zA-Z\s-]/g;
-    const specialPattern = /[a-zA-Z0-9\s-]+/g;
+    const specialPattern = /[0-9\s-]+/g;
     let isValid: boolean = true;
     const arr: Number[] = details[field] as number[];
     switch (step) {
@@ -384,9 +384,11 @@ function JobForm({
       const result = await (id === 0
         ? saveJobDetails(details)
         : editJobDetails(id, details));
-      setDetails(initalState);
       router.refresh();
-      toast('Changes saved successfully');
+      if (result) {
+        toast('Changes saved successfully');
+      }
+      setDetails(initalState);
       return;
     }
     setStep(String(Number(step) + 1));
@@ -441,6 +443,7 @@ function JobForm({
         onKeyDown={(e) => {
           if (e.key === 'Escape') {
             setIsOpen(false);
+            setDetails(initalState);
           }
         }}
         role="menu"

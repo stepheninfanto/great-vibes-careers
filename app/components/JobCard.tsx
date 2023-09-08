@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { deleteJobDetails } from './utils/fetchApiRSC';
 import { Job } from './utils/types/FormTypes';
 import { CardButton, Variant } from './UI/Button';
+import { initalState } from './UI/Constants';
 
 function JobCard({
   jobData,
@@ -45,9 +46,12 @@ function JobCard({
   } = jobData;
 
   const deleteJob = async () => {
-    await deleteJobDetails(id);
+    const result = await deleteJobDetails(id);
+    if (result) {
+      toast('Job post deleted successfully');
+    }
     router.refresh();
-    toast('Job post deleted successfully');
+    setDetails(initalState);
   };
 
   const editJob = async () => {
