@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default function FormInput({
   field,
@@ -12,7 +12,7 @@ export default function FormInput({
   // Function to render different input types
   const renderInput = () => {
     switch (field.inputType) {
-      case 'text':
+      case "text":
         return (
           <input
             type="text"
@@ -25,19 +25,20 @@ export default function FormInput({
             required={field.mandatory}
           />
         );
-      case 'number':
+      case "number":
         return (
           <input
-            type="number"
+            type="text"
             className={inputStyle}
             placeholder={field.placeholder}
             name={field.name}
             value={inputValue}
             onChange={onChange}
-            min={0}
+            inputMode="numeric"
+            pattern="[0-9]+"
           />
         );
-      case 'radio':
+      case "radio":
         return (
           <input
             type="radio"
@@ -47,7 +48,6 @@ export default function FormInput({
             value={field.label}
             onChange={onChange}
             checked={inputValue}
-            min={0}
           />
         );
       default:
@@ -69,7 +69,7 @@ export default function FormInput({
     <div key={field.htmlFor}>
       <label
         htmlFor={field.htmlFor}
-        className={`${labelStyle} ${field.labelInVisible && 'invisible'}`}
+        className={`${labelStyle} ${field.labelInVisible && "invisible"}`}
       >
         {field.label}
         {field.mandatory && <span className="text-errorFont">*</span>}

@@ -246,7 +246,7 @@ function JobForm({
   details: Job;
   setDetails: Dispatch<any>;
 }) {
-  const [step, setStep] = useState('1');
+  const [step, setStep] = useState('2');
   const [mode, setMode] = useState('Edit');
   const [errors, setErrors] = useState({});
   const [propertyName, setPropertyName] = useState('');
@@ -258,8 +258,8 @@ function JobForm({
 
   const checkValidFields = (field: string) => {
     const newErrors: any = {};
-    const pattern = /[a-zA-Z\s-]/g;
-    const specialPattern = /[0-9\s-]+/g;
+    const pattern = /^[a-zA-Z\s-]+$/g;
+    const totalEmployeePattern = /^[0-9\s-]+$/g;
     let isValid: boolean = true;
     const arr: Number[] = details[field] as number[];
     switch (step) {
@@ -290,7 +290,7 @@ function JobForm({
             }
             break;
           case 'totalEmployee':
-            if (!specialPattern.test(details[field])) {
+            if (!totalEmployeePattern.test(details[field])) {
               newErrors[field] = true;
               isValid = false;
             } else {
