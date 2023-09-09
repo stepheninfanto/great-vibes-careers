@@ -182,6 +182,7 @@ function Step2({
             name: 'totalEmployee',
             label: 'Total Employee',
             mandatory: false,
+            errorMsg: 'Total Employee must be a range, or a number',
           }}
           FormStyles={FormStyles}
           onChange={handleChange}
@@ -329,7 +330,7 @@ function JobForm({
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let propsName = name;
-    const updatedDetails: Job = { ...details };
+    const updatedDetails: Job = JSON.parse(JSON.stringify(details));
     let rangeIndex = -1;
 
     if (name.includes('max')) {

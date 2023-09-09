@@ -36,6 +36,7 @@ function AppContainer({ jobsList }: Job[] | any) {
           setIsOpen={setIsOpen}
           details={details}
           setDetails={setDetails}
+          key={details.id}
         />
       )}
 
