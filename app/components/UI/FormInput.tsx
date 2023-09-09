@@ -75,7 +75,7 @@ export default function FormInput({
         {field.mandatory && <span className="text-errorFont">*</span>}
         {invalidInput && (
           <span className="text-errorFont text-xs">
-            {`Please Enter Valid ${field.label}`}
+            {` : ${field.errorMsg}`}
           </span>
         )}
       </label>

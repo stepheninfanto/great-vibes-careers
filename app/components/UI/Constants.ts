@@ -6,6 +6,7 @@ export const formFieldsStep1 = [
     name: 'jobTitle',
     mandatory: true,
     inputType: 'text',
+    errorMsg: 'should only contain Alphabets',
   },
   {
     htmlFor: 'companyName',
@@ -14,6 +15,7 @@ export const formFieldsStep1 = [
     name: 'companyName',
     mandatory: true,
     inputType: 'text',
+    errorMsg: 'should only contain Alphabets',
   },
   {
     htmlFor: 'Industry',
@@ -22,6 +24,7 @@ export const formFieldsStep1 = [
     name: 'industryName',
     mandatory: true,
     inputType: 'text',
+    errorMsg: 'should only contain Alphabets',
   },
 ];
 
@@ -33,6 +36,7 @@ export const additonalFormFieldsStep1 = [
     name: 'location',
     labelInvisible: false,
     inputType: 'text',
+    errorMsg: 'should only contain Alphabets',
   },
   {
     htmlFor: 'remoteType',
@@ -41,6 +45,7 @@ export const additonalFormFieldsStep1 = [
     name: 'remoteType',
     labelInvisible: false,
     inputType: 'text',
+    errorMsg: 'should only contain Alphabets',
   },
 ];
 
@@ -52,6 +57,7 @@ export const formFieldsStep2 = [
     labelInVisible: false,
     inputType: 'number',
     placeholder: '0',
+    errorMsg: 'should only contain numbers less than 100',
   },
   {
     label: 'Experience',
@@ -60,6 +66,7 @@ export const formFieldsStep2 = [
     labelInVisible: true,
     inputType: 'number',
     placeholder: '1',
+    errorMsg: 'should only contain numbers less than 100',
   },
   {
     label: 'Salary',
@@ -68,6 +75,7 @@ export const formFieldsStep2 = [
     labelInVisible: false,
     inputType: 'number',
     placeholder: '0',
+    errorMsg: 'should only contain numbers',
   },
   {
     label: 'Salary',
@@ -76,12 +84,17 @@ export const formFieldsStep2 = [
     labelInVisible: true,
     inputType: 'number',
     placeholder: '100,000',
+    errorMsg: 'should only contain numbers',
   },
 ];
 
 export const additonalFormFieldsStep2 = [
-  { label: 'Quick Apply', name: 'Quick' },
-  { label: 'External Apply', name: 'External' },
+  { label: 'Quick Apply', name: 'Quick', errorMsg: 'Please enter valid input' },
+  {
+    label: 'External Apply',
+    name: 'External',
+    errorMsg: 'Please enter valid input',
+  },
 ];
 
 export const initalState = {

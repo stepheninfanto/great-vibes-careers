@@ -352,6 +352,11 @@ function JobForm({
     setDetails(updatedDetails);
   };
 
+  const handleOverlayClick = () => {
+    setIsOpen(false);
+    setDetails(initalState);
+  };
+
   const validateFields = (fieldList: Array<string>) => {
     const result = fieldList
       .map((ele) => checkValidFields(ele))
@@ -384,11 +389,11 @@ function JobForm({
       const result = await (id === 0
         ? saveJobDetails(details)
         : editJobDetails(id, details));
+      setDetails(initalState);
       router.refresh();
       if (result) {
         toast('Changes saved successfully');
       }
-      setDetails(initalState);
       return;
     }
     setStep(String(Number(step) + 1));
@@ -439,13 +444,7 @@ function JobForm({
       {/* overlay */}
       <div
         className="fixed inset-0 bg-black opacity-50"
-        onClick={() => setIsOpen(false)}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') {
-            setIsOpen(false);
-            setDetails(initalState);
-          }
-        }}
+        onClick={handleOverlayClick}
         role="menu"
         tabIndex={0}
         aria-label="Close"
