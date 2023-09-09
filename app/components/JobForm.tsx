@@ -445,6 +445,11 @@ function JobForm({
       <div
         className="fixed inset-0 bg-black opacity-50"
         onClick={handleOverlayClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            handleOverlayClick();
+          }
+        }}
         role="menu"
         tabIndex={0}
         aria-label="Close"
